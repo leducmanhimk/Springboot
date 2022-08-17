@@ -1,6 +1,5 @@
 package com.example.jwt_demo1.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public class ContactRepository {
+public class CustomContactRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,7 +29,7 @@ public class ContactRepository {
 
     //thực hiện truy vấn và trả về câu lệnh
     @Transactional
-    List<Contact> finAll(){
+    public List<Contact> finAll(){
         String jpql = "SELECT c FROM Contact c";
         TypedQuery<Contact> query = entityManager.createQuery(jpql,Contact.class);
 
@@ -44,7 +43,7 @@ public class ContactRepository {
 
     }
 
-    private Contact findByid(Integer id){
+    public Contact findByid(Integer id){
         return entityManager.find(Contact.class,id);
     }
 }

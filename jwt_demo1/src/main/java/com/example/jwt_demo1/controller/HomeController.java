@@ -2,28 +2,40 @@ package com.example.jwt_demo1.controller;
 
 
 import com.example.jwt_demo1.jwt.JwtTokenProvider;
+import com.example.jwt_demo1.model.Contact;
 import com.example.jwt_demo1.payload.LoginRequest;
 import com.example.jwt_demo1.payload.LoginResponse;
 import com.example.jwt_demo1.payload.RandomStuff;
+import com.example.jwt_demo1.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class HomeController {
 //    @Autowired
 //    AuthenticationManager authenticationManager;
 //
 //    @Autowired
 //    JwtAuth jwtAuth;
+    @Autowired
+    ContactService contactService;
+    @RequestMapping("/home")
+    public String viewHomePage(Model model){
+        List<Contact> listcontact = contactService.listAll();
+        model.addAttribute("listcontat",listcontact);
 
+//        return model;
+        return null;
+    }
 
     @Autowired
     JwtTokenProvider tokenProvider;

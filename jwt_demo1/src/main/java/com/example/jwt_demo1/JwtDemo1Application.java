@@ -1,38 +1,51 @@
 package com.example.jwt_demo1;
 
 import com.example.jwt_demo1.model.Contact;
-import com.example.jwt_demo1.model.ContactRepository;
+import com.example.jwt_demo1.model.CustomContactRepository;
+import com.example.jwt_demo1.model.CustomUserRepository;
+import com.example.jwt_demo1.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 
 @SpringBootApplication
-public class JwtDemo1Application implements CommandLineRunner {
-    @Autowired
-    private ContactRepository repo;
+public class JwtDemo1Application {
 
-    public static void main(String[] args) {
+    @Autowired
+    private CustomUserRepository customUserRepository;
+
+    @Autowired
+    private CustomContactRepository customContactRepository;
+
+    public static void main(String[] args){
         SpringApplication.run(JwtDemo1Application.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        updateContact();
-    }
-
-    private void updateContact() {
-        Contact existContact = new Contact();
-
-        existContact.setId(1);
-        existContact.setName("Peter Smith");
-        existContact.setEmail("petersmith@gmail.com");
-        existContact.setAddress("New York, USA");
-        existContact.setPhone("123456-2111");
-
-        Contact updatedContact = repo.update(existContact);
-
-    }
+//    @Override
+//    public void run(String... args) throws Exception {
+//       ListContact();
+//    }
+//
+//    private void addUser() {
+//
+//        User user = new User();
+//
+//
+//        user.setUsername("Manhle");
+//        user.setEmail("manhle@gmail.com");
+//        user.setPassword("123");
+//
+//        customUserRepository.save(user);
+//
+//
+//    }
+//    public void ListContact(){
+//        List<Contact> listcontact = customContactRepository.finAll();
+//        listcontact.forEach(System.out::println);
+//    }
 }
 
