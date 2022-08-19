@@ -6,13 +6,18 @@ import com.example.jwt_demo1.model.UserRespository;
 import com.example.jwt_demo1.payload.UserRequest;
 import com.example.jwt_demo1.payload.UserRespone;
 import com.example.jwt_demo1.service.UserService;
+import io.jsonwebtoken.Header;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
+
+
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +29,7 @@ public class UserController {
     @Autowired
     CustomUserRepository customUserRepository;
 
-
+//    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
     @PostMapping("/user")
     public UserRespone createUser( @RequestBody User user) {
 
@@ -39,15 +44,23 @@ public class UserController {
 
     }
     @PutMapping("/user/{id}")
-    public void updateUser (@PathVariable Long id ,  @RequestBody User user)
+    public ResponseEntity<User> updateUser (@PathVariable Long id ,  @RequestBody User user)
     {
-        User user1 = new User();
-        user1.setId(id);
-        user1.setUsername(user.getUsername());
-        user1.setPassword(user.getPassword());
-        user1.setEmail(user.getEmail());
+        HttpHeaders httpHeaders = new HttpHeaders();
 
-        userRespository.save(user1);
+        try {
+            User user1 = new User();
+            user1.setId(id);
+            user1.setUsername(user.getUsername());
+            user1.setPassword(user.getPassword());
+            user1.setEmail(user.getEmail());
+
+            userRespository.save(user1);
+            return new ResponseEntity<User>(user1,httpHeaders,HttpStatus.OK);
+        }
+        catch (NoSuchElementException e){
+            return  new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
     }
     @GetMapping("/users")
     public List<User> listAllUsers(){
@@ -55,7 +68,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public User findUserbyId(@PathVariable Long id,@RequestBody User user){
+    public User findUserbyId(@PathVariable Long id){
        return customUserRepository.finUserbyId(id);
     }
 

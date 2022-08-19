@@ -1,6 +1,9 @@
 package com.example.jwt_demo1.jwt;
 
 
+import com.example.jwt_demo1.model.CustomUserRepository;
+import com.example.jwt_demo1.model.User;
+import com.example.jwt_demo1.service.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,17 +21,20 @@ public class JwtTokenProvider {
     private final long JWT_EXPIRATION = 604800000L;
 
     //taoj jwt tu thong tin user
-    public String gennerateToken(){
+    public String gennerateToken(User user){
+        CustomUserRepository customUserRepository;
+
+
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
         Claims claims = Jwts.claims().setSubject(Long.toString(1L));
-        claims.put("id", 1);
-        claims.put("username", 1);
-        claims.put("email", 1);
+//        claims.put("id", user.getId());
+        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
 
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
-                .setSubject(Long.toString(1L))
+                .setSubject(Long.toString(1))
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expydate)

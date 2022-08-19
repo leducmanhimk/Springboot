@@ -23,7 +23,9 @@ public class CustomUserRepository {
     public User finUserbyId(Long id){
         return entityManager.find(User.class,id);
     }
-
+    public User findUserbyName(String username){
+        return entityManager.find(User.class,username);
+    }
     public List<User> getAlluser(){
 
             String jpql = "SELECT u FROM User u";
@@ -32,4 +34,6 @@ public class CustomUserRepository {
             return query.getResultList();
 
     }
+
+
 }
