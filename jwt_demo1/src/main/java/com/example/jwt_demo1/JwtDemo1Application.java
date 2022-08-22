@@ -1,15 +1,10 @@
 package com.example.jwt_demo1;
 
-import com.example.jwt_demo1.model.Contact;
 import com.example.jwt_demo1.model.CustomContactRepository;
 import com.example.jwt_demo1.model.CustomUserRepository;
-import com.example.jwt_demo1.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
 
 
 @SpringBootApplication

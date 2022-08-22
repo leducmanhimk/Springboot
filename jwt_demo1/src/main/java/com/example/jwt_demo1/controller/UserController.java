@@ -3,17 +3,13 @@ package com.example.jwt_demo1.controller;
 import com.example.jwt_demo1.model.CustomUserRepository;
 import com.example.jwt_demo1.model.User;
 import com.example.jwt_demo1.model.UserRespository;
-import com.example.jwt_demo1.payload.UserRequest;
 import com.example.jwt_demo1.payload.UserRespone;
-import com.example.jwt_demo1.service.UserService;
-import io.jsonwebtoken.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -46,7 +42,7 @@ public class UserController {
     @PutMapping("/user/{id}")
     public ResponseEntity<User> updateUser (@PathVariable Long id ,  @RequestBody User user)
     {
-        HttpHeaders httpHeaders = new HttpHeaders();
+
 
         try {
             User user1 = new User();
@@ -56,7 +52,7 @@ public class UserController {
             user1.setEmail(user.getEmail());
 
             userRespository.save(user1);
-            return new ResponseEntity<User>(user1,httpHeaders,HttpStatus.OK);
+            return new ResponseEntity<User>(user1,HttpStatus.OK);
         }
         catch (NoSuchElementException e){
             return  new ResponseEntity<User>(HttpStatus.NOT_FOUND);

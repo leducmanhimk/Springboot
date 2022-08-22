@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@Slf4j
+@Slf4j
 public class JwtAuth extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -44,7 +44,7 @@ public class JwtAuth extends OncePerRequestFilter {
                 }
             }
         } catch (Exception ex) {
-
+            log.error("failed on set user authentication", ex);
         }
 
         filterChain.doFilter(request, response);

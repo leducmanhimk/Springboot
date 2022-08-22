@@ -3,7 +3,6 @@ package com.example.jwt_demo1.service;
 import com.example.jwt_demo1.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +16,9 @@ public class CustomUserDetails implements UserDetails {
     User user;
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {// Mặc định mình sẽ để tất cả là ROLE_USER. Để demo cho đơn giản.
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singleton(new SimpleGrantedAuthority("ADMIN,USER"));
     }
 
     public String getEmail(){

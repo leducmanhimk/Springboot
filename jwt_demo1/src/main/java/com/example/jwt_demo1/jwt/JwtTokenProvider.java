@@ -3,12 +3,10 @@ package com.example.jwt_demo1.jwt;
 
 import com.example.jwt_demo1.model.CustomUserRepository;
 import com.example.jwt_demo1.model.User;
-import com.example.jwt_demo1.service.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
 
 @Component
@@ -31,10 +29,12 @@ public class JwtTokenProvider {
 //        claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         claims.put("email", user.getEmail());
+        claims.put("ROLE:",user.role.getRolename());
+        claims.put("id",user.getId());
 
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
-                .setSubject(Long.toString(1))
+                .setSubject(String.format("%s,%s",user.getEmail(),user.getId()))
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expydate)

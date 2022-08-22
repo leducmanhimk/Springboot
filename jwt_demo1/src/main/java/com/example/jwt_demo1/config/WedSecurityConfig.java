@@ -1,6 +1,8 @@
 package com.example.jwt_demo1.config;
 
 
+import com.example.jwt_demo1.jwt.JwtAuth;
+import com.example.jwt_demo1.service.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +24,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return new UserDetailsServiceImpl();
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,9 +48,11 @@ public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Handle an authorized attempts
         http.authorizeRequests()
+                .antMatchers("/random").hasAnyAuthority("ADMIN")
                 // No need authentication.
-                .antMatchers("/**").permitAll()
+                .antMatchers("**").permitAll()
                 // Need authentication.
                 .anyRequest().authenticated();
+
     }
 }

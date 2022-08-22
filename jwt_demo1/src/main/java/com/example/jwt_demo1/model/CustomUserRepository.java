@@ -23,6 +23,10 @@ public class CustomUserRepository {
     public User finUserbyId(Long id){
         return entityManager.find(User.class,id);
     }
+    public User findUserbyEmail(String email){
+        return entityManager.find(User.class,email);
+    }
+
     public User findUserbyName(String username){
         return entityManager.find(User.class,username);
     }
