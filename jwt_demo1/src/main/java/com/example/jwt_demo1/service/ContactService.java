@@ -1,9 +1,10 @@
 package com.example.jwt_demo1.service;
 
-import com.example.jwt_demo1.model.Contact;
-import com.example.jwt_demo1.model.ContactRespository;
-import com.example.jwt_demo1.model.CustomContactRepository;
+import com.example.jwt_demo1.Role.Role;
+import com.example.jwt_demo1.Contact.Contact;
+import com.example.jwt_demo1.Contact.ContactRespository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,5 +30,9 @@ public class ContactService {
 
     public void Delete(Long id){
         contactRepository.deleteById(id);
+    }
+
+    public static interface RoleRepository extends JpaRepository<Role,Long> {
+        Role findByRolename(String rolename);
     }
 }

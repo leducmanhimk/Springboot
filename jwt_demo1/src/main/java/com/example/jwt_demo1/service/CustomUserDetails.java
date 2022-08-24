@@ -1,6 +1,6 @@
 package com.example.jwt_demo1.service;
 
-import com.example.jwt_demo1.model.User;
+import com.example.jwt_demo1.User.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

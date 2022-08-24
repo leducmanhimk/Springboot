@@ -48,9 +48,12 @@ public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Handle an authorized attempts
         http.authorizeRequests()
-                .antMatchers("/random").hasAnyAuthority("ADMIN")
+
+//                .antMatchers("/random/**").hasAnyAuthority("ADMIN")
                 // No need authentication.
-                .antMatchers("**").permitAll()
+
+                .antMatchers("/api/**").permitAll()
+
                 // Need authentication.
                 .anyRequest().authenticated();
 

@@ -1,4 +1,4 @@
-package com.example.jwt_demo1.model;
+package com.example.jwt_demo1.Contact;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

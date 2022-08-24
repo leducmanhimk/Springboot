@@ -1,4 +1,6 @@
-package com.example.jwt_demo1.model;
+package com.example.jwt_demo1.User;
+
+import com.example.jwt_demo1.Role.Role;
 
 import javax.persistence.*;
 
@@ -14,9 +16,17 @@ public class User {
     private String email;
     private String password;
 
+    @Transient
+    private String rolename;
+
     @OneToOne
     @JoinColumn(name = "role_id")
-    public Role role;
+    public Role role = new Role(rolename);
+
+
+
+
+
 
     public String getPassword() {
         return password;
@@ -49,6 +59,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 
     String ToString(){

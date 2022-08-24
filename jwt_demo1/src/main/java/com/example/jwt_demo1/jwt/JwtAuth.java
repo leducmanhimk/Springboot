@@ -1,7 +1,9 @@
 package com.example.jwt_demo1.jwt;
 
 
+import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,7 +53,8 @@ public class JwtAuth extends OncePerRequestFilter {
         }
 
 
-    private String getJwtFromRequest(HttpServletRequest request) {
+
+    public String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         // Kiểm tra xem header Authorization có chứa thông tin jwt không
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {

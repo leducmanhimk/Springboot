@@ -1,8 +1,8 @@
 package com.example.jwt_demo1.jwt;
 
 
-import com.example.jwt_demo1.model.CustomUserRepository;
-import com.example.jwt_demo1.model.User;
+import com.example.jwt_demo1.User.CustomUserRepository;
+import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class JwtTokenProvider {
 
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
-                .setSubject(String.format("%s,%s",user.getEmail(),user.getId()))
+                .setSubject(Long.toString(1L))
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expydate)

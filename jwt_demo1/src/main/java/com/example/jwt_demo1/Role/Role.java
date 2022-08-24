@@ -1,9 +1,12 @@
-package com.example.jwt_demo1.model;
+package com.example.jwt_demo1.Role;
+
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
+
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +18,12 @@ public class Role {
         return id_role;
 
     }
+    public Role(){
 
+    }
+    public Role(String rolename){
+        this.rolename = rolename;
+    }
     public String getRolename() {
         return rolename;
     }

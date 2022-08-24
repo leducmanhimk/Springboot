@@ -1,5 +1,6 @@
-package com.example.jwt_demo1.model;
+package com.example.jwt_demo1.User;
 
+import com.example.jwt_demo1.User.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
