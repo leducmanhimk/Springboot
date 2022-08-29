@@ -44,6 +44,9 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512,JWT_SECRET)
                 .compact();
     }
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
+    }
     //laays thong tin user tu jwt
     public Long getUserIdFromJWT(String token){
         Claims claims = Jwts.parser()
