@@ -1,5 +1,6 @@
 package com.example.jwt_demo1.service;
 
+import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,11 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        // Kiểm tra xem user có tồn tại trong database không?
+        User user = userRespository.findUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new CustomUserDetails(user);
     }
 }

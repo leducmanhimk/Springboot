@@ -1,9 +1,11 @@
 package com.example.jwt_demo1.Role;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.*;
 
+import javax.persistence.*;
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 
@@ -13,6 +15,8 @@ public class Role {
     private  Long id_role;
 
     private String rolename;
+
+
 
     public Long getId_role() {
         return id_role;

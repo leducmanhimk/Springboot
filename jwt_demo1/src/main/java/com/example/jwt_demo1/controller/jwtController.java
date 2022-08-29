@@ -8,10 +8,12 @@ import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.LoginResponse;
 import com.example.jwt_demo1.payload.RandomStuff;
-import com.example.jwt_demo1.service.ContactService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,7 +76,10 @@ public class jwtController {
     public ModelAndView accessdenied() {
         return new ModelAndView("accessdenied");
     }
+
+
     @GetMapping("/random")
+    @PreAuthorize("hasRole('ADMIN')")
     public RandomStuff randomStuff(@RequestBody HttpServletRequest jwt){
        jwtAuth.getJwtFromRequest(jwt);
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");

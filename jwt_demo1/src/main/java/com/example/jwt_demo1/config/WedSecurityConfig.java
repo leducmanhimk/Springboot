@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -52,10 +53,12 @@ public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/random/**").hasAnyAuthority("ADMIN")
                 // No need authentication.
 
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/login/**").permitAll()
+                .antMatchers("/api/random/**").hasAuthority("ADMIN")
+
 
                 // Need authentication.
                 .anyRequest().authenticated();
-
+                http.addFilterBefore(new JwtAuth(),UsernamePasswordAuthenticationFilter.class);
     }
 }

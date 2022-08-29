@@ -5,9 +5,14 @@ import com.example.jwt_demo1.User.CustomUserRepository;
 import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.jaas.AuthorityGranter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -22,7 +27,6 @@ public class JwtTokenProvider {
     public String gennerateToken(User user){
         CustomUserRepository customUserRepository;
 
-
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
         Claims claims = Jwts.claims().setSubject(Long.toString(1L));
@@ -31,7 +35,6 @@ public class JwtTokenProvider {
         claims.put("email", user.getEmail());
         claims.put("ROLE:",user.role.getRolename());
         claims.put("id",user.getId());
-
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
                 .setSubject(Long.toString(1L))

@@ -16,7 +16,7 @@ public class CustomUserRepository {
 
 
     //thêm mới một bản ghi
-    @Transactional
+    @Transactional(rollbackOn = {Exception.class,Throwable.class})
     public void save(User user) {
         entityManager.persist(user);
     }
