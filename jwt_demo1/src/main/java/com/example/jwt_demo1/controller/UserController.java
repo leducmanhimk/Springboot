@@ -77,7 +77,6 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('EDITER')")
     public List<User> listAllUsers(){
         return customUserRepository.getAlluser();
     }

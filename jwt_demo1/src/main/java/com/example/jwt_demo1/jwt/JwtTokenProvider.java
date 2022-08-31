@@ -29,15 +29,15 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
-        Claims claims = Jwts.claims().setSubject(Long.toString(1L));
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
 //        claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         claims.put("email", user.getEmail());
-        claims.put("ROLE:",user.role.getRolename());
+        claims.put("role",user.getRole());
         claims.put("id",user.getId());
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
-                .setSubject(Long.toString(1L))
+                .setSubject(user.getUsername())
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expydate)
@@ -45,7 +45,8 @@ public class JwtTokenProvider {
                 .compact();
     }
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody().getSubject();
+        Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
+        return claims.getSubject().toString();
     }
     //laays thong tin user tu jwt
     public Long getUserIdFromJWT(String token){
@@ -57,6 +58,7 @@ public class JwtTokenProvider {
     }
     public boolean validateToken(String authToken){
         try {
+            System.out.println(JWT_SECRET);
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;
         }catch (MalformedJwtException ex){

@@ -29,22 +29,26 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            try {
-                String jwt = parseJwt(request);
-                if (jwt != null && tokenProvider.validateToken(jwt)){
-                    String username = tokenProvider.getUserNameFromJwtToken(jwt);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                }
-            }catch (Exception e){
-                logger.error("không thể xét quyền truy nhập");
+        try {
+            String jwt = parseJwt(request);
+            System.out.println(tokenProvider.validateToken(jwt));
+            if (jwt != null && tokenProvider.validateToken(jwt)) {
+                String username = tokenProvider.getUserNameFromJwtToken(jwt);
+                System.out.println(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            filterChain.doFilter(request,response);
+        } catch (Exception e) {
+            logger.error("không thể xét quyền truy nhập");
+        }
+        filterChain.doFilter(request, response);
     }
+
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {

@@ -37,7 +37,6 @@ public class CustomUserRepository {
             TypedQuery<User> query = entityManager.createQuery(jpql,User.class);
 
             return query.getResultList();
-
     }
 
 

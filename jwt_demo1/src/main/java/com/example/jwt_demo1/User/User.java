@@ -59,7 +59,9 @@ public class User {
         this.email = email;
     }
 
-
+    public Role getRole() {
+        return role;
+    }
 
     String ToString(){
         return "username";

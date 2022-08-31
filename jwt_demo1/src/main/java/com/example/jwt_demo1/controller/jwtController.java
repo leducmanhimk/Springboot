@@ -61,27 +61,19 @@ public class jwtController {
 //
 ////         Nếu không xảy ra exception tức là thông tin hợp lệ
 ////         Set thông tin authentication vào Security Context
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        SecurityContextHolder.getContext().setAuthentication((Authentication) user);
 //
-//                User user1 =  userRespository.getUserByUsername(user.getUsername());
-//                String username = user1.getUsername();
-//                user1.setUsername(username);
-//                String error = "không tìm thấy username";
-//                if (username == null) {
-//                   return new  LoginResponse(error);
-//                }
-//                else {
-//                    String jwt = tokenProvider.gennerateToken(user1);
-//                    return new LoginResponse(jwt);
-//                }
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.gennerateToken(user);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String roles = userDetails.getAuthorities().toString();
-
-        return new LoginResponse(jwt);
+                User user1 =  userRespository.getUserByUsername(user.getUsername());
+                String username = user1.getUsername();
+                user1.setUsername(username);
+                String error = "không tìm thấy username";
+                if (username == null) {
+                   return new  LoginResponse(error);
+                }
+                else {
+                    String jwt = tokenProvider.gennerateToken(user1);
+                    return new LoginResponse(jwt);
+                }
     }
     @RequestMapping("/accessdenied")
     public ModelAndView accessdenied() {
@@ -92,7 +84,6 @@ public class jwtController {
     @GetMapping("/random")
     @PreAuthorize("hasRole('ADMIN')")
     public RandomStuff randomStuff(@RequestBody HttpServletRequest jwt){
-
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
     }
 }
