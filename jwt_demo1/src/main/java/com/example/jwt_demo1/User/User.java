@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 
 @Entity
+
 @Table(name = "user")
 
 public class User {
@@ -22,6 +23,8 @@ public class User {
 
     @Transient
     private String rolename;
+
+
 
     @OneToOne
     @JoinColumn(name = "role_id")
@@ -63,7 +66,9 @@ public class User {
         return role;
     }
 
-    String ToString(){
-        return "username";
+
+    @Override
+    public String toString() {
+        return "ROLE_"+getRole().getRolename();
     }
 }

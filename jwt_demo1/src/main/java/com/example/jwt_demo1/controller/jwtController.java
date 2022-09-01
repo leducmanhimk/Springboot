@@ -51,17 +51,6 @@ public class jwtController {
     @PostMapping("/login")
     public LoginResponse authenticateUser(@Valid @RequestBody User user) {
 ////
-//        //Xác thực từ username và password.
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        user.getUsername(),
-//                        user.getPassword()
-//                )
-//        );
-//
-////         Nếu không xảy ra exception tức là thông tin hợp lệ
-////         Set thông tin authentication vào Security Context
-//        SecurityContextHolder.getContext().setAuthentication((Authentication) user);
 //
                 User user1 =  userRespository.getUserByUsername(user.getUsername());
                 String username = user1.getUsername();
@@ -83,7 +72,7 @@ public class jwtController {
 
     @GetMapping("/random")
     @PreAuthorize("hasRole('ADMIN')")
-    public RandomStuff randomStuff(@RequestBody HttpServletRequest jwt){
+    public RandomStuff randomStuff(){
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
     }
 }

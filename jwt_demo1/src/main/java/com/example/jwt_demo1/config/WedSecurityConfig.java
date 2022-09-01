@@ -54,8 +54,10 @@ public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/users").permitAll();
         http.authorizeRequests().antMatchers("/api/user").hasRole("ADMIN").and().httpBasic().and().csrf().disable();
         http.authorizeRequests().antMatchers("/api/user/**").hasRole("EDITER").and().httpBasic().and().csrf().disable();
-        http.authorizeRequests().antMatchers("/api/random/**").hasRole("ADMIN").and().httpBasic().and().csrf().disable();
+        http.authorizeRequests().antMatchers("/api/random").hasRole("ADMIN").and().httpBasic().and().csrf().disable();
         http.authorizeRequests().antMatchers("api/login/**").permitAll();
+
+
         http.addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 }
