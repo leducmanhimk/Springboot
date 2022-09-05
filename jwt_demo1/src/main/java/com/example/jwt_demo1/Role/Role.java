@@ -5,6 +5,7 @@ import lombok.Data;
 
 
 import javax.persistence.*;
+
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
@@ -12,22 +13,24 @@ import javax.persistence.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id_role;
+    private Long id_role;
 
     private String rolename;
-
 
 
     public Long getId_role() {
         return id_role;
 
     }
-    public Role(){
+
+    public Role() {
 
     }
-    public Role(String rolename){
+
+    public Role(String rolename) {
         this.rolename = rolename;
     }
+
     public String getRolename() {
         return rolename;
     }
@@ -42,6 +45,6 @@ public class Role {
 
     @Override
     public String toString() {
-        return "ROLE_"+rolename;
+        return "ROLE_" + rolename;
     }
 }

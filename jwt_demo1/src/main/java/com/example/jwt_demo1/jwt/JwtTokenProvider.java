@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     private final long JWT_EXPIRATION = 604800000L;
 
     //taoj jwt tu thong tin user
-    public String gennerateToken(User user){
+    public String gennerateToken(User user) {
         CustomUserRepository customUserRepository;
 
         Date now = new Date();
@@ -33,41 +33,39 @@ public class JwtTokenProvider {
 //        claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         claims.put("email", user.getEmail());
-        claims.put("role",user.getRole());
-        claims.put("id",user.getId());
+        claims.put("role", user.getRole());
+        claims.put("id", user.getId());
         // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expydate)
-                .signWith(SignatureAlgorithm.HS512,JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
+
     public String getUserNameFromJwtToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
-        return claims.getSubject().toString();
-    }
-    //laays thong tin user tu jwt
-    public Long getUserIdFromJWT(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
-                .parseClaimsJws(token)
-                .getBody();
-        return Long.parseLong(claims.getSubject());
+                .parseClaimsJws(token).getBody();
+        return claims.getSubject().toString();
     }
-    public boolean validateToken(String authToken){
+
+
+
+    public boolean validateToken(String authToken) {
         try {
             System.out.println(JWT_SECRET);
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;
-        }catch (MalformedJwtException ex){
+        } catch (MalformedJwtException ex) {
             log.error("invalid JWT token");
-        }catch (ExpiredJwtException ex){
+        } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token");
-        }catch (UnsupportedJwtException ex){
+        } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
-        }catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty.");
         }
         return false;

@@ -25,7 +25,6 @@ public class User {
     private String rolename;
 
 
-
     @OneToOne
     @JoinColumn(name = "role_id")
     public Role role = new Role(rolename);
@@ -69,6 +68,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "ROLE_"+getRole().getRolename();
+        return "ROLE_" + getRole().getRolename();
     }
 }

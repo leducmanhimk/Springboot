@@ -32,7 +32,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return authorities;
     }
 
@@ -47,7 +46,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "user.getPassword();";
+        return "user.getPassword()";
     }
 
     @Override

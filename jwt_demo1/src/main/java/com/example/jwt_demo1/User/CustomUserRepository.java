@@ -16,27 +16,29 @@ public class CustomUserRepository {
 
 
     //thêm mới một bản ghi
-    @Transactional(rollbackOn = {Exception.class,Throwable.class})
+    @Transactional(rollbackOn = {Exception.class, Throwable.class})
     public void save(User user) {
         entityManager.persist(user);
     }
 
-    public User finUserbyId(Long id){
-        return entityManager.find(User.class,id);
-    }
-    public User findUserbyEmail(String email){
-        return entityManager.find(User.class,email);
+    public User finUserbyId(Long id) {
+        return entityManager.find(User.class, id);
     }
 
-    public User findUserbyName(String username){
-        return entityManager.find(User.class,username);
+    public User findUserbyEmail(String email) {
+        return entityManager.find(User.class, email);
     }
-    public List<User> getAlluser(){
 
-            String jpql = "SELECT u FROM User u";
-            TypedQuery<User> query = entityManager.createQuery(jpql,User.class);
+    public User findUserbyName(String username) {
+        return entityManager.find(User.class, username);
+    }
 
-            return query.getResultList();
+    public List<User> getAlluser() {
+
+        String jpql = "SELECT u FROM User u";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+
+        return query.getResultList();
     }
 
 

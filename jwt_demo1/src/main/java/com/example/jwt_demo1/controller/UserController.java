@@ -1,4 +1,5 @@
 package com.example.jwt_demo1.controller;
+
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
 import com.example.jwt_demo1.User.CustomUserRepository;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -32,7 +32,7 @@ public class UserController {
     @Autowired
     RoleRestponsitory roleRestponsitory;
 
-//    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
+    //    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
     @PostMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -40,7 +40,6 @@ public class UserController {
             Role role1 = new Role();
             String name = user.role.getRolename();
             role1 = roleRestponsitory.findRoleByRolename(name);
-
             User user1 = new User();
             user1.setUsername(user.getUsername());
             user1.setPassword(user.getPassword());
@@ -48,42 +47,43 @@ public class UserController {
             user1.role.setId_role(role1.getId_role());
             user1.role.setRolename(role1.getRolename());
             userRespository.save(user1);
-            return  ResponseEntity.ok(new UserRespone("thêm người dùng thành công",user1));
-
-
-
-            }catch (Exception exception){
-                return ResponseEntity.badRequest().body(new UserRespone("lỗi!"));
-            }
+            return ResponseEntity.ok(new UserRespone("thêm người dùng thành công", user1));
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body(new UserRespone("lỗi!"));
+        }
 
     }
+
     @PutMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER')")
-    public ResponseEntity<User> updateUser (@PathVariable Long id ,  @RequestBody User user)
-    {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
             User user1 = new User();
             user1.setId(id);
             user1.setUsername(user.getUsername());
             user1.setPassword(user.getPassword());
             user1.setEmail(user.getEmail());
-
             userRespository.save(user1);
-            return new ResponseEntity<User>(user1,HttpStatus.OK);
-        }
-        catch (NoSuchElementException e){
-            return  new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<User>(user1, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/users")
-    public List<User> listAllUsers(){
+    @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
+    public List<User> listAllUsers() {
         return customUserRepository.getAlluser();
     }
 
     @GetMapping("/user/{id}")
-    public User findUserbyId(@PathVariable Long id){
-       return customUserRepository.finUserbyId(id);
+    @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
+    public UserRespone findUserbyId(@PathVariable Long id) {
+        User user = customUserRepository.finUserbyId(id);
+        if (user ==  null)
+            return new UserRespone("không tìm thấy user");
+        return new UserRespone("tìm thấy user thuộc id" + id, user);
     }
+
 
 }

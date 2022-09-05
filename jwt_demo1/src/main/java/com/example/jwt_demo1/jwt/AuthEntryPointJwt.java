@@ -13,10 +13,11 @@ import java.io.IOException;
 
 //tạo lớp ngoại lệ về xác thực
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-    private  static  final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        logger.error("lỗi xác thực:{}",authException.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Lỗi:không thể xác thực");
+        logger.error("lỗi xác thực:{}", authException.getMessage());
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Lỗi:không thể xác thực");
     }
 }

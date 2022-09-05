@@ -32,16 +32,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        SecurityContextHolder.clearContext();
         try {
             String jwt = parseJwt(request);
-            System.out.println(tokenProvider.validateToken(jwt));
             if (jwt != null && tokenProvider.validateToken(jwt)) {
                 String username = tokenProvider.getUserNameFromJwtToken(jwt);
-                System.out.println(username);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
             }
         } catch (Exception e) {
             logger.error("không thể xét quyền truy nhập");

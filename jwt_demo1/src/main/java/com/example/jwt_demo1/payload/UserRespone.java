@@ -9,10 +9,12 @@ import lombok.Data;
 public class UserRespone {
     private String messenger = "thêm đối tượng thành công";
     User user = new User();
-    public UserRespone(User information){
+
+    public UserRespone(User information) {
         this.user = information;
     }
-    public  UserRespone(String messenger){
+
+    public UserRespone(String messenger) {
         this.messenger = messenger;
     }
 }

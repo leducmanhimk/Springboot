@@ -32,7 +32,6 @@ public class jwtController {
     @Autowired
     AuthenticationManager authenticationManager;
 
-
     @Autowired
     JwtTokenProvider tokenProvider;
 
@@ -42,28 +41,20 @@ public class jwtController {
     @Autowired
     CustomUserRepository customUserRepository;
 
-
-
-
-//    @Autowired
-//    ContactService.RoleRepository roleRepository;
-
     @PostMapping("/login")
     public LoginResponse authenticateUser(@Valid @RequestBody User user) {
-////
-//
-                User user1 =  userRespository.getUserByUsername(user.getUsername());
-                String username = user1.getUsername();
-                user1.setUsername(username);
-                String error = "không tìm thấy username";
-                if (username == null) {
-                   return new  LoginResponse(error);
-                }
-                else {
-                    String jwt = tokenProvider.gennerateToken(user1);
-                    return new LoginResponse(jwt);
-                }
+        User user1 = userRespository.getUserByUsername(user.getUsername());
+        String username = user1.getUsername();
+        user1.setUsername(username);
+        String error = "không tìm thấy username";
+        if (username == null) {
+            return new LoginResponse(error);
+        } else {
+            String jwt = tokenProvider.gennerateToken(user1);
+            return new LoginResponse(jwt);
+        }
     }
+
     @RequestMapping("/accessdenied")
     public ModelAndView accessdenied() {
         return new ModelAndView("accessdenied");
@@ -71,8 +62,8 @@ public class jwtController {
 
 
     @GetMapping("/random")
-    @PreAuthorize("hasRole('ADMIN')")
-    public RandomStuff randomStuff(){
+    @PreAuthorize("hasRole('EDITER')")
+    public RandomStuff randomStuff() {
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
     }
 }
