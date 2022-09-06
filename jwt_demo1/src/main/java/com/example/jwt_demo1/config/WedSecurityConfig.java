@@ -36,15 +36,13 @@ public class WedSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-////
-
-
-        http.authorizeRequests().antMatchers("/api/user").hasRole("ADMIN").and().httpBasic().and().csrf().disable();
-        http.authorizeRequests().antMatchers("/api/user/**").hasAnyRole("ADMIN","EDITER").and().httpBasic().and().csrf().disable();
-        http.authorizeRequests().antMatchers("/api/random").hasAnyRole("ADMIN","EDITER").and().httpBasic().and().csrf().disable();
+        http.authorizeRequests().antMatchers("/api/user").hasRole("ADMIN")
+                .and().httpBasic().and().csrf().disable();
+        http.authorizeRequests().antMatchers("/api/user/**")
+                .hasAnyRole("ADMIN","EDITER").and().httpBasic().and().csrf().disable();
+        http.authorizeRequests().antMatchers("/api/random")
+                .hasAnyRole("ADMIN","EDITER").and().httpBasic().and().csrf().disable();
         http.authorizeRequests().antMatchers("api/login/**").permitAll();
-
-
         http.addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 }

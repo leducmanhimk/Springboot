@@ -10,6 +10,7 @@ import com.example.jwt_demo1.payload.LoginResponse;
 import com.example.jwt_demo1.payload.RandomStuff;
 
 import com.example.jwt_demo1.service.UserDetailsImpl;
+import java8.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,7 @@ public class jwtController {
     @GetMapping("/random")
     @PreAuthorize("hasRole('EDITER')")
     public RandomStuff randomStuff() {
+        CompletableFuture.runAsync()
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
     }
 }
