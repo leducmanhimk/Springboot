@@ -2,6 +2,7 @@ package com.example.jwt_demo1.controller;
 
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
+import com.example.jwt_demo1.Thread.ThreadManager;
 import com.example.jwt_demo1.User.CustomUserRepository;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
@@ -19,12 +20,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class UserController{
 
     @Autowired
     UserRespository userRespository;
@@ -35,10 +37,16 @@ public class UserController {
     @Autowired
     RoleRestponsitory roleRestponsitory;
 
+    @Autowired
+    ThreadManager t;
+
+    @Autowired
+    Executor executor;
     //    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
     @PostMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
+
         try {
             String name = user.role.getRolename();
            Role role1 = roleRestponsitory.findRoleByRolename(name);
@@ -49,6 +57,7 @@ public class UserController {
             user1.role.setId_role(role1.getId_role());
             user1.role.setRolename(role1.getRolename());
             userRespository.save(user1);
+            Thread.sleep(5000);
             return ResponseEntity.ok(new UserRespone("thêm người dùng thành công", user1));
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(new UserRespone("lỗi!"));

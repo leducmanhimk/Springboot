@@ -9,22 +9,21 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-
 @EnableAsync
 @Configuration
 public class AsyncConfig {
-//    CompletableFuture<User>
-        private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(AsyncConfig.class);
+    //    CompletableFuture<User>
+    private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(AsyncConfig.class);
 
-        @Bean(name = "taskExecutor")
-        public Executor taskexecutor(){
-                LOGGER.debug("khởi tạo thực thi không đồng bộ");
-                final ThreadPoolTaskExecutor executor  = new ThreadPoolTaskExecutor();
-                executor.setCorePoolSize(2);
-                executor.setMaxPoolSize(2);
-                executor.setQueueCapacity(100);
-                executor.setThreadNamePrefix("UserThread");
-                executor.initialize();
-                return  executor;
-        }
+    @Bean(name = "taskExecutor")
+    public Executor taskexecutor() {
+        LOGGER.debug("khởi tạo thực thi không đồng bộ");
+        final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("UserThread");
+        executor.initialize();
+        return executor;
+    }
 }
