@@ -55,7 +55,7 @@ public class jwtController {
         String error = "không tìm thấy username";
 
         t = new ThreadManager();
-        t.run();
+
         if (username == null) {
             return new LoginResponse(error);
         } else {

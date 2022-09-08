@@ -39,7 +39,10 @@
             <version>1.6.2</version>
         </dependency>
         <!-- Thanks for using https://jar-download.com -->
-
+        <dependency>
+           <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>

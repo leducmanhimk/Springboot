@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -33,13 +34,14 @@ public class CustomContactRepository {
         String jpql = "SELECT c FROM Contact c";
         TypedQuery<Contact> query = entityManager.createQuery(jpql,Contact.class);
 
-        return query.getResultList();
+        return Collections.unmodifiableList(query.getResultList());
     }
     //xóa một bản ghi
     @Transactional
     public void delete(Integer id){
         Contact contact = entityManager.find(Contact.class,id);
         entityManager.remove(contact);
+
 
     }
 

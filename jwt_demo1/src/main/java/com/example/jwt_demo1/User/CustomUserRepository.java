@@ -1,13 +1,17 @@
 package com.example.jwt_demo1.User;
 
+import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.Thread.ThreadManager;
 import com.example.jwt_demo1.User.User;
 import java8.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
@@ -18,22 +22,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@Repository
-public class CustomUserRepository extends ThreadManager {
+@Service
+public class CustomUserRepository  {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserRepository.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
     UserRespository userRespository;
 
-    Logger logger = LoggerFactory.getLogger(CustomUserRepository.class);
+    @Autowired
+    JavaMailSender emailSender;
 
-    @Override
-    public void run() {
 
-    }
 
     public void start() {
         System.out.println("xin chào");
@@ -58,13 +64,13 @@ public class CustomUserRepository extends ThreadManager {
         return entityManager.find(User.class, username);
     }
 
-    @Async
+
     public List<User> getAlluser() {
 
         String jpql = "SELECT u FROM User u";
         TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
 
-        return query.getResultList();
+        return Collections.unmodifiableList(query.getResultList());
     }
 
     @Async
@@ -99,5 +105,13 @@ public class CustomUserRepository extends ThreadManager {
         } catch (final IOException e) {
             throw new Exception("Failed to parse CSV file {}", e);
         }
+    }
+
+    @Async
+    public CompletableFuture<User> findUser(Long id) throws InterruptedException {
+        logger.info("tìm kiếm user " + id);
+        User user = entityManager.find(User.class, id);
+        Thread.sleep(1000L);
+        return CompletableFuture.completedFuture(user);
     }
 }
