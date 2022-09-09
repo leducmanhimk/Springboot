@@ -3,14 +3,11 @@ package com.example.jwt_demo1.controller;
 import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
-import com.example.jwt_demo1.Thread.ThreadManager;
-import com.example.jwt_demo1.User.CustomUserRepository;
+import com.example.jwt_demo1.Thread.ThreadSendEmail;
+import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
-import com.example.jwt_demo1.User.UserRoleNotfoundException;
 import com.example.jwt_demo1.payload.UserRespone;
-import java8.util.concurrent.CompletableFuture;
-import net.bytebuddy.utility.nullability.AlwaysNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -41,7 +33,7 @@ public class UserController {
     UserRespository userRespository;
 
     @Autowired
-    CustomUserRepository customUserRepository;
+    CustomUserRepositoryImpl customUserRepository;
 
     @Autowired
     RoleRestponsitory roleRestponsitory;
@@ -50,7 +42,7 @@ public class UserController {
     JavaMailSender emailSender;
 
     @Autowired
-    ThreadManager thread;
+    ThreadSendEmail thread;
 
     @Autowired
     Executor executor;
@@ -71,12 +63,24 @@ public class UserController {
             user1.role.setRolename(role1.getRolename());
             userRespository.save(user1);
             Thread upload1 = new Thread(thread, "sendemail");
+            Thread upload2 = new Thread(thread, "sendemail2");
             upload1.start();
-            if (upload1.getState().equals("wait") == true){
-                Thread upload2 = new Thread(thread, "sendemail");
+            logger.info("Trạng thái của luồng " + upload1.getName() + " " + upload1.getState());
+            upload1.join();
+            logger.info("Trạng thái của luồng " + upload1.getName() + " " + upload1.getState());
+            logger.info("Trạng thái của luồng " + upload2.getName() + " " + upload2.getState());
+            if (!upload1.isAlive()) {
+                logger.info("hoàn thành luồng 1 ---> " + upload1.getName());
+                logger.info("bắt đầu gọi luồng 2");
                 upload2.start();
             }
+
+            upload2.join();
+            System.out.println("Trạng thái của luồng " + upload2.getState());
             // todo : khi 2 hoan thanh nhiem vu. print value;
+            if (!upload2.isAlive()) {
+                logger.info("luồng 2 đã hoàn thành");
+            }
 
             return ResponseEntity.ok(new UserRespone("thêm người dùng thành công", user1));
         } catch (Exception exception) {
@@ -127,6 +131,7 @@ public class UserController {
         if (user == null)
             return new UserRespone("không tìm thấy user");
         return new UserRespone("tìm thấy user thuộc id" + id, user);
+
     }
 
 
@@ -144,6 +149,7 @@ public class UserController {
 
         // Send Message!
         this.emailSender.send(message);
+        CustomUserRepositoryImpl d = new CustomUserRepositoryImpl();
 
         return "Email Sent!";
     }

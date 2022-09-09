@@ -1,19 +1,13 @@
 package com.example.jwt_demo1.Thread;
 
 import com.example.jwt_demo1.Email.MyEmail;
-import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.payload.UserRespone;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
-import java.io.InputStream;
-
-public class ThreadManager implements Runnable{
+@Service
+public class ThreadSendEmail implements Runnable{
     private Thread t;
     private String threadname;
 

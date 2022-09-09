@@ -1,7 +1,7 @@
 package com.example.jwt_demo1;
 
 import com.example.jwt_demo1.Contact.CustomContactRepository;
-import com.example.jwt_demo1.User.CustomUserRepository;
+import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JwtDemo1Application {
 
     @Autowired
-    private CustomUserRepository customUserRepository;
+    private CustomUserRepositoryImpl customUserRepository;
 
     @Autowired
     private CustomContactRepository customContactRepository;

@@ -1,18 +1,13 @@
 package com.example.jwt_demo1.jwt;
 
 
-import com.example.jwt_demo1.User.CustomUserRepository;
+import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.jaas.AuthorityGranter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -25,7 +20,7 @@ public class JwtTokenProvider {
 
     //taoj jwt tu thong tin user
     public String gennerateToken(User user) {
-        CustomUserRepository customUserRepository;
+        CustomUserRepositoryImpl customUserRepository;
 
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);

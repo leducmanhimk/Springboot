@@ -1,16 +1,13 @@
-package com.example.jwt_demo1.User;
+package com.example.jwt_demo1.service;
 
-import com.example.jwt_demo1.Email.MyEmail;
-import com.example.jwt_demo1.Thread.ThreadManager;
 import com.example.jwt_demo1.User.User;
+import com.example.jwt_demo1.User.UserRespository;
 import java8.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,9 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class CustomUserRepository  {
+public class CustomUserRepositoryImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomUserRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserRepositoryImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
