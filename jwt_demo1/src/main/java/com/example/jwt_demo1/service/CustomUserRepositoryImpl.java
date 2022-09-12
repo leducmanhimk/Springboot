@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class CustomUserRepositoryImpl {
@@ -71,44 +72,9 @@ public class CustomUserRepositoryImpl {
     }
 
     @Async
-    public CompletableFuture<List<User>> SaveUsers(MultipartFile file) throws Exception {
-        long start = System.currentTimeMillis();
-        List<User> users = parseCSVFile(file);
-        logger.info("lưu danh sách users{}", users.size(), "" + Thread.currentThread().getName());
-        for (User user : users) {
-            user = userRespository.save(user);
-        }
-        long end = System.currentTimeMillis();
-        logger.info("tổng thời gian {}", (end - start));
-        return CompletableFuture.completedFuture(users);
-    }
-
-    private List<User> parseCSVFile(final MultipartFile file) throws Exception {
-        final List<User> users = new ArrayList<>();
-        try {
-            try (final BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    final String[] data = line.split(",");
-                    final User user = new User();
-                    user.setUsername(data[0]);
-                    user.setEmail(data[1]);
-                    user.setPassword(data[2]);
-                    user.getRole().setRolename(data[3]);
-                    users.add(user);
-                }
-                return users;
-            }
-        } catch (final IOException e) {
-            throw new Exception("Failed to parse CSV file {}", e);
-        }
-    }
-
-    @Async
-    public CompletableFuture<User> findUser(Long id) throws InterruptedException {
-        logger.info("tìm kiếm user " + id);
-        User user = entityManager.find(User.class, id);
-        Thread.sleep(1000L);
-        return CompletableFuture.completedFuture(user);
+    public CompletableFuture<User> findUser(Long id) throws InterruptedException, ExecutionException {
+      return CompletableFuture.supplyAsync(() -> {
+          return entityManager.find(User.class,id);
+      });
     }
 }

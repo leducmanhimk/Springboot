@@ -17,16 +17,14 @@ import java.util.List;
 public class UserDetailsImpl implements UserDetails {
     UserRespository userRespository;
 
-    @Autowired
 
-
-    private static final long serialVersionUID = 1L;
-    private Long id;
-    private String username;
-    private String email;
+    private  Long id;
+    private  String username;
+    private  String email;
     @JsonIgnore
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    @JsonIgnore
+    private  Collection<? extends GrantedAuthority> authorities;
     User user1 = new User();
 
 

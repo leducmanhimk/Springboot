@@ -8,6 +8,7 @@ import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.UserRespone;
+import java8.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 
@@ -74,14 +77,12 @@ public class UserController {
                 logger.info("bắt đầu gọi luồng 2");
                 upload2.start();
             }
-
             upload2.join();
             System.out.println("Trạng thái của luồng " + upload2.getState());
             // todo : khi 2 hoan thanh nhiem vu. print value;
             if (!upload2.isAlive()) {
                 logger.info("luồng 2 đã hoàn thành");
             }
-
             return ResponseEntity.ok(new UserRespone("thêm người dùng thành công", user1));
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(new UserRespone("lỗi!"));
@@ -114,43 +115,35 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
-    public UserRespone findUserbyId(@PathVariable Long id) {
-//        long start = System.currentTimeMillis();
-//        User  user = new User();
-//        CompletableFuture<User> user1 = customUserRepository.findUser(id);
-//        CompletableFuture<User> user2 = customUserRepository.findUser(id + 1);
-//        CompletableFuture<User> user3 = customUserRepository.findUser(id + 2);
-//
-//        CompletableFuture.allOf(user1,user2,user3).join();
-//
-//        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
-//        logger.info("--> " + user1.get());
-//        logger.info("--> " + user2.get());
-//        logger.info("--> " + user3.get());
-        User user = customUserRepository.finUserbyId(id);
+    public UserRespone findUserbyId(@PathVariable Long id) throws ExecutionException, InterruptedException {
+        long start = System.currentTimeMillis();
+        User user;
+        CompletableFuture<User> user1 = customUserRepository.findUser(id);
+        CompletableFuture<User> user2 = customUserRepository.findUser(id + 1);
+        CompletableFuture<User> user3 = customUserRepository.findUser(id + 2);
+
+        CompletableFuture.allOf(user1, user2, user3).join();
+
+        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
+        logger.info("--> " + user1.get());
+        logger.info("--> " + user2.get());
+        logger.info("--> " + user3.get());
+        user = customUserRepository.finUserbyId(id);
         if (user == null)
             return new UserRespone("không tìm thấy user");
-        return new UserRespone("tìm thấy user thuộc id" + id, user);
-
+        return new UserRespone("tìm thấy user thuộc id " + id, user);
     }
 
-
-    @ResponseBody
     @GetMapping("/sendSimpleEmail")
     @PreAuthorize("hasRole('ADMIN')")
     public String sendSimpleEmail() {
-
         // Create a Simple MailMessage.
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(MyEmail.FRIEND_EMAIL);
         message.setSubject("Test Simple Email");
         message.setText("Hello, Im testing Simple Email");
-
         // Send Message!
         this.emailSender.send(message);
-        CustomUserRepositoryImpl d = new CustomUserRepositoryImpl();
-
         return "Email Sent!";
     }
 }

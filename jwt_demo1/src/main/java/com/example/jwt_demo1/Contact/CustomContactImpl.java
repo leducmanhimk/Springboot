@@ -1,6 +1,7 @@
 package com.example.jwt_demo1.Contact;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,8 +10,8 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
-public class CustomContactRepository {
+@Service
+public class CustomContactImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -41,8 +42,6 @@ public class CustomContactRepository {
     public void delete(Integer id){
         Contact contact = entityManager.find(Contact.class,id);
         entityManager.remove(contact);
-
-
     }
 
     public Contact findByid(Integer id){

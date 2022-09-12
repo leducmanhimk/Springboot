@@ -33,8 +33,6 @@ public class jwtController {
     @Autowired
     CustomUserRepositoryImpl customUserRepository;
 
-    @Autowired
-    ThreadSendEmail t;
 
     @PostMapping("/login")
     public LoginResponse authenticateUser(@Valid @RequestBody User user) {
@@ -42,18 +40,13 @@ public class jwtController {
         String username = user1.getUsername();
         user1.setUsername(username);
         String error = "không tìm thấy username";
-
-        t = new ThreadSendEmail();
-
-        if (username == null) {
+        if (username.equals("")) {
             return new LoginResponse(error);
         } else {
             String jwt = tokenProvider.gennerateToken(user1);
             return new LoginResponse(jwt);
         }
     }
-
-
 
 
     @GetMapping("/random")
