@@ -38,7 +38,6 @@ public class CustomUserRepositoryImpl {
     JavaMailSender emailSender;
 
 
-
     public void start() {
         System.out.println("xin chào");
     }
@@ -48,6 +47,7 @@ public class CustomUserRepositoryImpl {
     @Transactional(rollbackOn = {Exception.class, Throwable.class})
     public void save(User user) {
         entityManager.persist(user);
+        logger.info("thêm một user mới");
     }
 
     public User finUserbyId(Long id) {
@@ -72,9 +72,11 @@ public class CustomUserRepositoryImpl {
     }
 
     @Async
-    public CompletableFuture<User> findUser(Long id) throws InterruptedException, ExecutionException {
-      return CompletableFuture.supplyAsync(() -> {
-          return entityManager.find(User.class,id);
-      });
+    public CompletableFuture<String> findUser(Long id) throws InterruptedException, ExecutionException {
+        User user = CompletableFuture.supplyAsync(() ->
+
+                entityManager.find(User.class, id)).join();
+
+        return CompletableFuture.completedFuture(user.getUsername());
     }
 }

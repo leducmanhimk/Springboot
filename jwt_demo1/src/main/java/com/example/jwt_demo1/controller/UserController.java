@@ -1,5 +1,4 @@
 package com.example.jwt_demo1.controller;
-
 import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
@@ -8,7 +7,6 @@ import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.UserRespone;
-import java8.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +16,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
+
 
 
 @RestController
@@ -47,15 +43,14 @@ public class UserController {
     @Autowired
     ThreadSendEmail thread;
 
-    @Autowired
-    Executor executor;
 
     //    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
     @PostMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-
         try {
+            Thread upload1 = new Thread(thread, "sendemail");
+            Thread upload2 = new Thread(thread, "sendemail2");
             String name = user.role.getRolename();
             Role role1 = roleRestponsitory.findRoleByRolename(name);
             User user1 = new User();
@@ -65,8 +60,6 @@ public class UserController {
             user1.role.setId_role(role1.getId_role());
             user1.role.setRolename(role1.getRolename());
             userRespository.save(user1);
-            Thread upload1 = new Thread(thread, "sendemail");
-            Thread upload2 = new Thread(thread, "sendemail2");
             upload1.start();
             logger.info("Trạng thái của luồng " + upload1.getName() + " " + upload1.getState());
             upload1.join();
@@ -116,19 +109,22 @@ public class UserController {
     @GetMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
     public UserRespone findUserbyId(@PathVariable Long id) throws ExecutionException, InterruptedException {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         User user;
-        CompletableFuture<User> user1 = customUserRepository.findUser(id);
-        CompletableFuture<User> user2 = customUserRepository.findUser(id + 1);
-        CompletableFuture<User> user3 = customUserRepository.findUser(id + 2);
-
-        CompletableFuture.allOf(user1, user2, user3).join();
-
-        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
-        logger.info("--> " + user1.get());
-        logger.info("--> " + user2.get());
-        logger.info("--> " + user3.get());
+//        CompletableFuture<String> user1 = customUserRepository.findUser(id);
+//
+//        CompletableFuture<String> user2 = customUserRepository.findUser(id + 1);
+//        Thread.sleep(3000);
+//        CompletableFuture<String> user3 = customUserRepository.findUser(id + 2);
+//
+//        CompletableFuture.allOf(user1, user2, user3).join();
+//
+//        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
+//        logger.info("--> " + user1.get());
+//        logger.info("--> " + user2.get());
+//        logger.info("--> " + user3.get());
         user = customUserRepository.finUserbyId(id);
+
         if (user == null)
             return new UserRespone("không tìm thấy user");
         return new UserRespone("tìm thấy user thuộc id " + id, user);

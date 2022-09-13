@@ -44,12 +44,12 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "user.getPassword()";
+        return user1.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return "user.getUsername();";
+        return user1.getUsername();
     }
 
     @Override
