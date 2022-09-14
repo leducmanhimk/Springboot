@@ -11,6 +11,7 @@ import com.example.jwt_demo1.payload.RandomStuff;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -36,16 +37,19 @@ public class jwtController {
 
     @PostMapping("/login")
     public LoginResponse authenticateUser(@Valid @RequestBody User user) {
-        User user1 = userRespository.getUserByUsername(user.getUsername());
-        String username = user1.getUsername();
-        user1.setUsername(username);
-        String error = "không tìm thấy username";
-        if (username.equals("")) {
-            return new LoginResponse(error);
-        } else {
-            String jwt = tokenProvider.gennerateToken(user1);
-            return new LoginResponse(jwt);
+        try {
+            User user2;
+            user2 = user;
+            User user1 = userRespository.findUserByUsername(user.getUsername());
+            if (user2.getPassword().equals(user1.getPassword())) {
+                String jwt = tokenProvider.gennerateToken(user2);
+                return new LoginResponse(jwt);
+            }
+
+        } catch (NullPointerException exception) {
+            return new LoginResponse("sai Tên tài khoản đăng nhập");
         }
+        return new LoginResponse("sai mật khẩu tài khoản");
     }
 
 

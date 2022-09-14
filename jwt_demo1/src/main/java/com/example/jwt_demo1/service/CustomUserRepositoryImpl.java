@@ -38,9 +38,8 @@ public class CustomUserRepositoryImpl {
     JavaMailSender emailSender;
 
 
-    public void start() {
-        System.out.println("xin chào");
-    }
+
+
 
     //thêm mới một bản ghi
     @Async

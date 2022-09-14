@@ -85,7 +85,7 @@ public class UserController {
 
     @PutMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER')")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
             User user1 = new User();
             user1.setId(id);
@@ -93,9 +93,9 @@ public class UserController {
             user1.setPassword(user.getPassword());
             user1.setEmail(user.getEmail());
             userRespository.save(user1);
-            return new ResponseEntity<User>(user1, HttpStatus.OK);
+            return new ResponseEntity<>(user1, HttpStatus.OK) ;
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("không thể sửa người dùng",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -142,4 +142,5 @@ public class UserController {
         this.emailSender.send(message);
         return "Email Sent!";
     }
+
 }

@@ -15,9 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
-    UserRespository userRespository;
-
-
     private  Long id;
     private  String username;
     private  String email;
