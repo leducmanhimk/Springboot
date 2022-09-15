@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ThreadSendEmail implements Runnable{
+    public  ThreadSendEmail(){
+
+    }
     private Thread t;
     private String threadname;
 

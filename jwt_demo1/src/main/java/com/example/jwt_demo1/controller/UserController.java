@@ -1,5 +1,8 @@
 package com.example.jwt_demo1.controller;
+
 import com.example.jwt_demo1.Email.MyEmail;
+import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
+import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
 import com.example.jwt_demo1.Thread.ThreadSendEmail;
@@ -16,9 +19,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 
 
 
@@ -28,20 +31,21 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    UserRespository userRespository;
+
+    private final  UserRespository userRespository;
+    private final CustomUserRepositoryImpl customUserRepository;
+    private final RoleRestponsitory roleRestponsitory;
+    private final JavaMailSender emailSender;
+    private final ThreadSendEmail thread;
 
     @Autowired
-    CustomUserRepositoryImpl customUserRepository;
-
-    @Autowired
-    RoleRestponsitory roleRestponsitory;
-
-    @Autowired
-    JavaMailSender emailSender;
-
-    @Autowired
-    ThreadSendEmail thread;
+    public UserController(CustomUserRepositoryImpl customUserRepository,ThreadSendEmail threadSendEmail, JavaMailSender emailSender,RoleRestponsitory roleRestponsitory,UserRespository userRespository){
+        this.customUserRepository = customUserRepository;
+        this.thread = threadSendEmail;
+        this.emailSender = emailSender;
+        this.roleRestponsitory = roleRestponsitory;
+        this.userRespository = userRespository;
+    }
 
 
     //    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
@@ -93,9 +97,9 @@ public class UserController {
             user1.setPassword(user.getPassword());
             user1.setEmail(user.getEmail());
             userRespository.save(user1);
-            return new ResponseEntity<>(user1, HttpStatus.OK) ;
+            return new ResponseEntity<>(user1, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<>("không thể sửa người dùng",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("không thể sửa người dùng", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -108,25 +112,13 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
-    public UserRespone findUserbyId(@PathVariable Long id) throws ExecutionException, InterruptedException {
-//        long start = System.currentTimeMillis();
+    public UserRespone findUserbyId(@PathVariable Long id) {
         User user;
-//        CompletableFuture<String> user1 = customUserRepository.findUser(id);
-//
-//        CompletableFuture<String> user2 = customUserRepository.findUser(id + 1);
-//        Thread.sleep(3000);
-//        CompletableFuture<String> user3 = customUserRepository.findUser(id + 2);
-//
-//        CompletableFuture.allOf(user1, user2, user3).join();
-//
-//        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
-//        logger.info("--> " + user1.get());
-//        logger.info("--> " + user2.get());
-//        logger.info("--> " + user3.get());
+
         user = customUserRepository.finUserbyId(id);
 
         if (user == null)
-            return new UserRespone("không tìm thấy user");
+            throw new NotfoundUsernameException();
         return new UserRespone("tìm thấy user thuộc id " + id, user);
     }
 
@@ -143,4 +135,19 @@ public class UserController {
         return "Email Sent!";
     }
 
+    @DeleteMapping("/deleteuser/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteuser(@PathVariable Long id){
+
+       try {
+           customUserRepository.delete(id);
+       }
+       catch (NullPointerException ex){
+           throw new NotfoundUsernameException();
+       }
+       catch (IllegalArgumentException ex){
+           throw new IllegalUserException();
+       }
+        return new ResponseEntity<>("xóa đối tượng thành công",HttpStatus.OK);
+    }
 }
