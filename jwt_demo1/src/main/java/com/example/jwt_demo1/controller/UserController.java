@@ -24,22 +24,24 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-
 @RestController
 @RequestMapping("/api")
+
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
-    private final  UserRespository userRespository;
+    private final UserRespository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
     private final RoleRestponsitory roleRestponsitory;
     private final JavaMailSender emailSender;
     private final ThreadSendEmail thread;
 
     @Autowired
-    public UserController(CustomUserRepositoryImpl customUserRepository,ThreadSendEmail threadSendEmail, JavaMailSender emailSender,RoleRestponsitory roleRestponsitory,UserRespository userRespository){
+    public UserController(CustomUserRepositoryImpl customUserRepository
+            , ThreadSendEmail threadSendEmail, JavaMailSender emailSender, RoleRestponsitory roleRestponsitory,
+                          UserRespository userRespository) {
         this.customUserRepository = customUserRepository;
         this.thread = threadSendEmail;
         this.emailSender = emailSender;
@@ -47,8 +49,6 @@ public class UserController {
         this.userRespository = userRespository;
     }
 
-
-    //    @ResponseStatus(code = HttpStatus.OK,reason = "OK")
     @PostMapping("/user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -80,6 +80,7 @@ public class UserController {
             if (!upload2.isAlive()) {
                 logger.info("luồng 2 đã hoàn thành");
             }
+
             return ResponseEntity.ok(new UserRespone("thêm người dùng thành công", user1));
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(new UserRespone("lỗi!"));
@@ -137,17 +138,14 @@ public class UserController {
 
     @DeleteMapping("/deleteuser/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteuser(@PathVariable Long id){
-
-       try {
-           customUserRepository.delete(id);
-       }
-       catch (NullPointerException ex){
-           throw new NotfoundUsernameException();
-       }
-       catch (IllegalArgumentException ex){
-           throw new IllegalUserException();
-       }
-        return new ResponseEntity<>("xóa đối tượng thành công",HttpStatus.OK);
+    public ResponseEntity<?> delete_an_User(@PathVariable Long id) {
+        try {
+            customUserRepository.delete(id);
+        } catch (NullPointerException ex) {
+            throw new NotfoundUsernameException();
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalUserException();
+        }
+        return new ResponseEntity<>("xóa đối tượng thành công", HttpStatus.OK);
     }
 }

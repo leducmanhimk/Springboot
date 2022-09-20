@@ -3,7 +3,6 @@ package com.example.jwt_demo1.controller;
 
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.jwt.JwtTokenProvider;
-import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.LoginResponse;
@@ -12,26 +11,26 @@ import com.example.jwt_demo1.payload.RandomStuff;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
+
 
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api_authen")
 public class jwtController {
 
-    private final AuthenticationManager authenticationManager;
+
     private final JwtTokenProvider tokenProvider;
     private final UserRespository userRespository;
 
 
+
     @Autowired
-    public jwtController(UserRespository userRespository, JwtTokenProvider tokenProvider,AuthenticationManager authenticationManager) {
+    public  jwtController(UserRespository userRespository, JwtTokenProvider tokenProvider) {
         this.userRespository = userRespository;
         this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
     }
 
 
@@ -46,7 +45,6 @@ public class jwtController {
                 String jwt = tokenProvider.gennerateToken(user2);
                 return new LoginResponse(jwt);
             }
-
         } catch (NullPointerException exception) {
             throw new NotfoundUsernameException();
         }
@@ -60,3 +58,4 @@ public class jwtController {
         return new RandomStuff("JWT Hợp lệ mới có thể thấy được message này");
     }
 }
+

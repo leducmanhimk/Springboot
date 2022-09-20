@@ -8,18 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
-@Repository
-
 public interface UserRespository extends JpaRepository<User,Long> {
-
-
     User findUserById(Long id);
     User findUserByUsername(String username);
-
     @Query("SELECT u FROM User u WHERE u.username =:username")
     public User getUserByUsername(@Param("username")String username);
-
-
-
-
 }

@@ -10,9 +10,9 @@ import javax.persistence.*;
 @Entity
 
 @Table(name = "user")
-
+@AllArgsConstructor
 public class User {
-
+    public User(){}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +27,8 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "role_id")
+
+
     public Role role = new Role(rolename);
 
     public String getPassword() {

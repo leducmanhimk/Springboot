@@ -5,6 +5,7 @@ import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -16,12 +17,16 @@ public class JwtTokenProvider {
     private final String JWT_SECRET = "lemanh";
 
     //Thời gian có hiệu lực của chuỗi jwt
-    private final long JWT_EXPIRATION = 604800000L;
+    private final long JWT_EXPIRATION = 60000;
+
+    @Value("${jwttoken.app.jwtCookieName}")
+    private String jwtCookies;
+
+    @Value("${jwttoken.app.jwtRefreshCookieName}")
+    private String jwtRefreshCookie;
 
     //taoj jwt tu thong tin user
     public String gennerateToken(User user) {
-        CustomUserRepositoryImpl customUserRepository;
-
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
         Claims claims = Jwts.claims().setSubject(user.getUsername());
@@ -46,7 +51,6 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token).getBody();
         return claims.getSubject().toString();
     }
-
 
 
     public boolean validateToken(String authToken) {

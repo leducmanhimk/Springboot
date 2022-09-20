@@ -1,13 +1,23 @@
 package com.example.jwt_demo1.ExceptionHandler;
 
+import com.example.jwt_demo1.payload.ResponseMessageFile;
+import org.hibernate.sql.OracleJoinFragment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class apiExceptionHandler {
+
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> IlleagalArgument(){
+        return new ResponseEntity<>("lỗi phân tích cú pháp",HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(value = NotfoundUsernameException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -19,5 +29,10 @@ public class apiExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> IllegallUserException(IllegalUserException exception) {
         return new ResponseEntity<>("người dùng không hợp lệ", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ResponseMessageFile> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessageFile("File too large!"));
     }
 }

@@ -18,16 +18,13 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-
         mailSender.setUsername(MyEmail.MY_EMAIL);
         mailSender.setPassword(MyEmail.MY_PASSWORD);
-
         Properties property = mailSender.getJavaMailProperties();
         property.put("mail.transport.protocol","smtp");
         property.put("mail.smtp.auth","true");
         property.put("mail.smtp.starttls.enable","true");
         property.put("mail.debug","true");
-
         return mailSender;
     }
 }

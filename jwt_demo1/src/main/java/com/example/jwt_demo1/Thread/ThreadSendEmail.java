@@ -14,6 +14,8 @@ public class ThreadSendEmail implements Runnable{
     private Thread t;
     private String threadname;
 
+
+
     @Autowired
      JavaMailSender emailSender;
 
@@ -28,7 +30,5 @@ public class ThreadSendEmail implements Runnable{
           emailSender.send(message);
         System.out.println("đã chạy vào đây");
     }
-
-
 
 }
