@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -19,6 +20,7 @@ public class JwtTokenProvider {
     //Thời gian có hiệu lực của chuỗi jwt
     private final long JWT_EXPIRATION = 60000;
 
+    private final long JWT_REFESHEXPIRATION = 100000;
     @Value("${jwttoken.app.jwtCookieName}")
     private String jwtCookies;
 
@@ -45,13 +47,32 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String doGenerateRefeshToken(User
+                                                user) {
+        Date now = new Date();
+        Date expydate = new Date(now.getTime() + JWT_REFESHEXPIRATION);
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+//       claimd
+        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole());
+        claims.put("id", user.getId());
+        // Tạo chuỗi json web token từ id của user.
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expydate)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .compact();
+    }
+
     public String getUserNameFromJwtToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token).getBody();
         return claims.getSubject().toString();
     }
-
 
     public boolean validateToken(String authToken) {
         try {

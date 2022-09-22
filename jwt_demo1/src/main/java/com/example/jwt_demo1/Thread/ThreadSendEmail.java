@@ -20,7 +20,7 @@ public class ThreadSendEmail implements Runnable{
      JavaMailSender emailSender;
 
     @Override
-    public void run() {
+    public synchronized void run() {
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(MyEmail.FRIEND_EMAIL);
@@ -29,6 +29,7 @@ public class ThreadSendEmail implements Runnable{
 
           emailSender.send(message);
         System.out.println("đã chạy vào đây");
+        notify();
     }
 
 }

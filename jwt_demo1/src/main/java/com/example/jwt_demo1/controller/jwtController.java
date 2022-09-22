@@ -20,20 +20,13 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api_authen")
 public class jwtController {
-
-
     private final JwtTokenProvider tokenProvider;
     private final UserRespository userRespository;
-
-
-
     @Autowired
     public  jwtController(UserRespository userRespository, JwtTokenProvider tokenProvider) {
         this.userRespository = userRespository;
         this.tokenProvider = tokenProvider;
     }
-
-
     @PostMapping("/login")
     public LoginResponse authenticateUser(@Valid @RequestBody User user) {
         try {
@@ -43,15 +36,14 @@ public class jwtController {
 
             if (user2.getPassword().equals(user1.getPassword())) {
                 String jwt = tokenProvider.gennerateToken(user2);
-                return new LoginResponse(jwt);
+                String rfjwt = tokenProvider.doGenerateRefeshToken(user2);
+                return new LoginResponse(jwt,rfjwt);
             }
         } catch (NullPointerException exception) {
             throw new NotfoundUsernameException();
         }
         return new LoginResponse("sai mật khẩu tài khoản");
     }
-
-
     @GetMapping("/random")
     @PreAuthorize("hasRole('EDITER')")
     public RandomStuff randomStuff() {

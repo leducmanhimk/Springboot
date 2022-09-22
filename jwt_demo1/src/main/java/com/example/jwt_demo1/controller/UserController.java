@@ -10,6 +10,8 @@ import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.UserRespone;
+import java8.util.concurrent.CompletableFuture;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
+    @Autowired
     private final UserRespository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
     private final RoleRestponsitory roleRestponsitory;
@@ -53,8 +55,8 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            Thread upload1 = new Thread(thread, "sendemail");
-            Thread upload2 = new Thread(thread, "sendemail2");
+            Thread upload1 = new Thread(thread, "sendmail");
+            Thread upload2 = new Thread(thread, "sendmail2");
             String name = user.role.getRolename();
             Role role1 = roleRestponsitory.findRoleByRolename(name);
             User user1 = new User();
@@ -111,13 +113,36 @@ public class UserController {
         return customUserRepository.getAlluser();
     }
 
+    @SneakyThrows
     @GetMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
     public UserRespone findUserbyId(@PathVariable Long id) {
         User user;
+        CompletableFuture<User> user1 = CompletableFuture.supplyAsync(() ->
+                {
 
+                    logger.info("đã hoàn thành luồng 1");
+                    return customUserRepository.finUserbyId(id);
+                }
+        );
+        CompletableFuture<User> user2 = CompletableFuture.supplyAsync(() ->
+                {
+                    logger.info("đã hoàn thành luồng 2");
+                    return customUserRepository.finUserbyId(id + 3);
+                }
+        );
+        CompletableFuture<User> user3 = CompletableFuture.supplyAsync(() ->
+                {
+                    logger.info("đã hoàn thành luồng 3");
+                    return customUserRepository.finUserbyId(id + 5);
+                }
+        );
+        CompletableFuture.allOf(user1, user2, user3).join();
+        logger.info("đã hoàn thành cả 3 luồng: ");
+        logger.info("--> " + user1.get());
+        logger.info("--> " + user2.get());
+        logger.info("--> " + user3.get());
         user = customUserRepository.finUserbyId(id);
-
         if (user == null)
             throw new NotfoundUsernameException();
         return new UserRespone("tìm thấy user thuộc id " + id, user);
@@ -147,5 +172,35 @@ public class UserController {
             throw new IllegalUserException();
         }
         return new ResponseEntity<>("xóa đối tượng thành công", HttpStatus.OK);
+    }
+
+    @GetMapping("/simulatorcombine")
+    public ResponseEntity<?> simulatorcombine() {
+        CompletableFuture<String> future1 = CompletableFuture
+                .supplyAsync(() -> "Future1")
+                .thenApply((s) -> {
+                    logger.info("bắt đầu future1");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return s + "!";
+                });
+        CompletableFuture<String> future2 = CompletableFuture
+                .supplyAsync(() -> "Future2")
+                .thenApply((s) -> {
+                    logger.info("bắt đầu future2");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return s + "!";
+                });
+
+        future1.thenCombine(future2, (s1 ,s2) -> s1 + " + " + s2)
+                .thenAccept(logger::info);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

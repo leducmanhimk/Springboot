@@ -4,6 +4,7 @@ package com.example.jwt_demo1.jwt;
 import com.example.jwt_demo1.User.UserRespository;
 
 import com.example.jwt_demo1.service.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,8 +42,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        } catch (Exception e) {
+            else {
+                logger.error("không thể xét quyền truy nhập");
+            }
+        } catch (ExpiredJwtException e) {
             logger.error("không thể xét quyền truy nhập");
+
         }
         filterChain.doFilter(request, response);
     }

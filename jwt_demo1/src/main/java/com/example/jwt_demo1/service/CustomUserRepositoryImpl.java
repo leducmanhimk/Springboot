@@ -70,12 +70,10 @@ public class CustomUserRepositoryImpl {
     }
 
     @Async
-    public CompletableFuture<String> findUser(Long id) {
-        User user = CompletableFuture.supplyAsync(() ->
+    public  CompletableFuture<User> findUser(Long id) {
 
-                entityManager.find(User.class, id)).join();
 
-        return CompletableFuture.completedFuture(user.getUsername());
+        return  CompletableFuture.completedFuture(entityManager.find(User.class, id));
     }
 
     @Transactional

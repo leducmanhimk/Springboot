@@ -33,6 +33,6 @@ public class apiExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ResponseMessageFile> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessageFile("File too large!"));
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessageFile("kích thước của tệp quá lớn!"));
     }
 }
