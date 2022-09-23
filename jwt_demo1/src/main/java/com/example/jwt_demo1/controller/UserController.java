@@ -1,5 +1,4 @@
 package com.example.jwt_demo1.controller;
-
 import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
@@ -21,7 +20,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,7 +31,7 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
+
     private final UserRespository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
     private final RoleRestponsitory roleRestponsitory;
@@ -120,20 +118,37 @@ public class UserController {
         User user;
         CompletableFuture<User> user1 = CompletableFuture.supplyAsync(() ->
                 {
-
-                    logger.info("đã hoàn thành luồng 1");
+                    try {
+                        Thread.sleep(30000);
+                        logger.info("đã hoàn thành luồng 1");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     return customUserRepository.finUserbyId(id);
                 }
         );
         CompletableFuture<User> user2 = CompletableFuture.supplyAsync(() ->
                 {
-                    logger.info("đã hoàn thành luồng 2");
+
+                    try {
+                        Thread.sleep(20000);
+                        logger.info("đã hoàn thành luồng 2");
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     return customUserRepository.finUserbyId(id + 3);
                 }
         );
         CompletableFuture<User> user3 = CompletableFuture.supplyAsync(() ->
                 {
-                    logger.info("đã hoàn thành luồng 3");
+
+                    try {
+                        Thread.sleep(30000);
+                        logger.info("đã hoàn thành luồng 3");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     return customUserRepository.finUserbyId(id + 5);
                 }
         );
@@ -165,6 +180,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete_an_User(@PathVariable Long id) {
         try {
+
             customUserRepository.delete(id);
         } catch (NullPointerException ex) {
             throw new NotfoundUsernameException();
@@ -192,7 +208,7 @@ public class UserController {
                 .thenApply((s) -> {
                     logger.info("bắt đầu future2");
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(20000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -203,4 +219,7 @@ public class UserController {
                 .thenAccept(logger::info);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+
+
 }

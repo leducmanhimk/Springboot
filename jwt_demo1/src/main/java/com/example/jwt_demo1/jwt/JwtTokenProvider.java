@@ -47,8 +47,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String doGenerateRefeshToken(User
-                                                user) {
+    public String doGenerateRefeshToken(User user) {
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_REFESHEXPIRATION);
         Claims claims = Jwts.claims().setSubject(user.getUsername());

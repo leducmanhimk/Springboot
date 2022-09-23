@@ -42,9 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            else {
-                logger.error("không thể xét quyền truy nhập");
-            }
+
         } catch (ExpiredJwtException e) {
             logger.error("không thể xét quyền truy nhập");
 
