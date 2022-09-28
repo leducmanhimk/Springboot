@@ -20,7 +20,6 @@ public class JwtTokenProvider {
     //Thời gian có hiệu lực của chuỗi jwt
     private final long JWT_EXPIRATION = 60000;
 
-    private final long JWT_REFESHEXPIRATION = 100000;
     @Value("${jwttoken.app.jwtCookieName}")
     private String jwtCookies;
 
@@ -31,6 +30,7 @@ public class JwtTokenProvider {
     public String gennerateToken(User user) {
         Date now = new Date();
         Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
+
         Claims claims = Jwts.claims().setSubject(user.getUsername());
 //        claims.put("id", user.getId());
         claims.put("username", user.getUsername());
@@ -49,6 +49,7 @@ public class JwtTokenProvider {
 
     public String doGenerateRefeshToken(User user) {
         Date now = new Date();
+        long JWT_REFESHEXPIRATION = 100000;
         Date expydate = new Date(now.getTime() + JWT_REFESHEXPIRATION);
         Claims claims = Jwts.claims().setSubject(user.getUsername());
 //       claimd

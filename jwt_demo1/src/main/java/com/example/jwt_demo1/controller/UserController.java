@@ -1,9 +1,11 @@
 package com.example.jwt_demo1.controller;
+
 import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
+import com.example.jwt_demo1.Thread.MyRunable;
 import com.example.jwt_demo1.Thread.ThreadSendEmail;
 import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
@@ -20,8 +22,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @RestController
@@ -30,8 +36,6 @@ import java.util.NoSuchElementException;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-
     private final UserRespository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
     private final RoleRestponsitory roleRestponsitory;
@@ -115,7 +119,7 @@ public class UserController {
     @GetMapping("/user/{id}")
     @PreAuthorize("hasRole('EDITER') or hasRole('ADMIN') or hasRole('USER')")
     public UserRespone findUserbyId(@PathVariable Long id) {
-        User user;
+        User user = new User();
         CompletableFuture<User> user1 = CompletableFuture.supplyAsync(() ->
                 {
                     try {
@@ -129,7 +133,6 @@ public class UserController {
         );
         CompletableFuture<User> user2 = CompletableFuture.supplyAsync(() ->
                 {
-
                     try {
                         Thread.sleep(20000);
                         logger.info("đã hoàn thành luồng 2");
@@ -157,9 +160,7 @@ public class UserController {
         logger.info("--> " + user1.get());
         logger.info("--> " + user2.get());
         logger.info("--> " + user3.get());
-        user = customUserRepository.finUserbyId(id);
-        if (user == null)
-            throw new NotfoundUsernameException();
+
         return new UserRespone("tìm thấy user thuộc id " + id, user);
     }
 
@@ -215,11 +216,47 @@ public class UserController {
                     return s + "!";
                 });
 
-        future1.thenCombine(future2, (s1 ,s2) -> s1 + " + " + s2)
+        future1.thenCombine(future2, (s1, s2) -> s1 + " + " + s2)
                 .thenAccept(logger::info);
         return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
+    private static final int NTHREDS = 10;
 
+    @GetMapping("/simulatorExcutor")
+    public ResponseEntity<?> TestThreadPool() {
+        ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
+        for (int i = 0; i < 500; i++) {
+            Runnable worker = new MyRunable(10000L + i);
+            executor.execute(worker);
+        }
+        // This will make the executor accept no new threads
+        // and finish all existing threads in the queue
+        executor.shutdown();
+        // Wait until all threads are finish
+//        executor.awaitTermination();
+        System.out.println("Finished all threads");
 
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+    @GetMapping("/simulatorSyn")
+    public void SimulatorSyn() {
+        final User user = new User();
+        Thread t1 = new Thread() {
+            public void run() {
+               logger.info("luồng 1 bắt đầu thực hiện");
+                customUserRepository.RutTien(20000);
+            }
+        };
+        t1.start();
+        Thread t2 = new Thread(){
+            public void run() {
+                logger.info("luồng 2 bắt đầu thực hiện");
+                customUserRepository.nopTien(30000);
+            }
+        };
+        t2.start();
+    }
 }
+

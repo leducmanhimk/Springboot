@@ -1,6 +1,5 @@
 package com.example.jwt_demo1.service;
 
-import com.example.jwt_demo1.Contact.Contact;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import java8.util.concurrent.CompletableFuture;
@@ -8,9 +7,9 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -20,6 +19,7 @@ import javax.transaction.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @Service
 @AllArgsConstructor
@@ -47,6 +47,7 @@ public class CustomUserRepositoryImpl {
         logger.info("thêm một user mới");
     }
 
+    @Async
     public User finUserbyId(Long id) {
         return entityManager.find(User.class, id);
     }
@@ -60,7 +61,6 @@ public class CustomUserRepositoryImpl {
     }
 
 
-
     public List<User> getAlluser() {
 
         String jpql = "SELECT u FROM User u";
@@ -70,16 +70,39 @@ public class CustomUserRepositoryImpl {
     }
 
     @Async
-    public  CompletableFuture<User> findUser(Long id) {
-
-
-        return  CompletableFuture.completedFuture(entityManager.find(User.class, id));
+    public CompletableFuture<User> findUser(Long id) {
+        return CompletableFuture.completedFuture(entityManager.find(User.class, id));
     }
 
     @Transactional
-    public void delete(Long id){
-        User user = entityManager.find(User.class,id);
+    public void delete(Long id) {
+        User user = entityManager.find(User.class, id);
         entityManager.remove(user);
     }
 
+    public synchronized void RutTien(int sotien) {
+        User user = new User();
+        System.out.println("giao dich rut tien dang thục hien,so tien" + sotien + "...");
+        int sotienmoi = user.getSodu();
+        if (user.getSodu() < sotien) {
+            System.out.println("so tien trong tai khoan khong du");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                System.out.println(e.toString());
+            }
+        }
+
+        sotienmoi -= sotien;
+        System.out.println("rut tien thanh cong,so tien hien co" + sotienmoi);
+    }
+    public synchronized void nopTien(int sotiennop){
+        User user = new User();
+        System.out.println("Giao dịch nộp tiền đang được thực hiện với" +
+                " số tiền nộp = " + sotiennop + "...");
+        int sotienmoi = user.getSodu();
+        sotienmoi += sotiennop;
+        System.out.println("Nộp tiền thành công. Số tiền hiện có trong tài khoản = " + sotienmoi);
+        notify();
+    }
 }

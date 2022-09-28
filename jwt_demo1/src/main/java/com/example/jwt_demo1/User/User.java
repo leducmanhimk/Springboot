@@ -12,7 +12,9 @@ import javax.persistence.*;
 @Table(name = "user")
 @AllArgsConstructor
 public class User {
-    public User(){}
+    public User(){
+        System.out.println("Tài khoản hiện có = " + sodu);
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +25,8 @@ public class User {
 
     @Transient
     private String rolename;
-
+    @Transient
+    private int sodu = 10000;
 
     @OneToOne
     @JoinColumn(name = "role_id")
@@ -67,6 +70,10 @@ public class User {
         return role;
     }
 
+
+    public int getSodu() {
+        return sodu;
+    }
 
     @Override
     public String toString() {
