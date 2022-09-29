@@ -28,8 +28,8 @@ public class CustomUserRepositoryImpl {
 
     }
 
+    User user = new User();
     private static final Logger logger = LoggerFactory.getLogger(CustomUserRepositoryImpl.class);
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -81,28 +81,29 @@ public class CustomUserRepositoryImpl {
     }
 
     public synchronized void RutTien(int sotien) {
-        User user = new User();
-        System.out.println("giao dich rut tien dang thục hien,so tien" + sotien + "...");
+        logger.info("giao dich rut tien dang thục hien,so tien " + sotien + "...");
         int sotienmoi = user.getSodu();
         if (user.getSodu() < sotien) {
-            System.out.println("so tien trong tai khoan khong du");
+            logger.info("so tien trong tai khoan khong du");
             try {
                 wait();
             } catch (InterruptedException e) {
                 System.out.println(e.toString());
             }
         }
-
-        sotienmoi -= sotien;
-        System.out.println("rut tien thanh cong,so tien hien co" + sotienmoi);
+    else {
+            sotienmoi -= sotien;
+            user.setSodu(sotienmoi);
+            logger.info("rut tien thanh cong,so tien hien co "+ sotienmoi);
+        }
     }
     public synchronized void nopTien(int sotiennop){
-        User user = new User();
-        System.out.println("Giao dịch nộp tiền đang được thực hiện với" +
+        logger.info("Giao dịch nộp tiền đang được thực hiện với" +
                 " số tiền nộp = " + sotiennop + "...");
         int sotienmoi = user.getSodu();
         sotienmoi += sotiennop;
-        System.out.println("Nộp tiền thành công. Số tiền hiện có trong tài khoản = " + sotienmoi);
+        user.setSodu(sotienmoi);
+        logger.info("Nộp tiền thành công. Số tiền hiện có trong tài khoản = " + sotienmoi);
         notify();
     }
 }

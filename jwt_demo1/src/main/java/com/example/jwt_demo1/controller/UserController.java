@@ -5,6 +5,7 @@ import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.Role.Role;
 import com.example.jwt_demo1.Role.RoleRestponsitory;
+import com.example.jwt_demo1.Sum.SumAction;
 import com.example.jwt_demo1.Thread.MyRunable;
 import com.example.jwt_demo1.Thread.ThreadSendEmail;
 import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
@@ -25,9 +26,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -243,20 +247,29 @@ public class UserController {
     @GetMapping("/simulatorSyn")
     public void SimulatorSyn() {
         final User user = new User();
-        Thread t1 = new Thread() {
-            public void run() {
-               logger.info("luồng 1 bắt đầu thực hiện");
-                customUserRepository.RutTien(20000);
-            }
-        };
+        Thread t1 = new Thread(() -> {
+            logger.info("luồng 1 bắt đầu thực hiện");
+            customUserRepository.RutTien(20000);
+        });
         t1.start();
-        Thread t2 = new Thread(){
-            public void run() {
-                logger.info("luồng 2 bắt đầu thực hiện");
-                customUserRepository.nopTien(30000);
-            }
-        };
+        Thread t2 = new Thread(() -> {
+            logger.info("luồng 2 bắt đầu thực hiện");
+            customUserRepository.nopTien(30000);
+        });
         t2.start();
+    }
+    @GetMapping("/simulatorforkjoin")
+    public void SimulatorForkJoin(){
+        Random random = new Random();
+
+        List<Long> data = random
+                .longs(10,1,5)
+                .boxed()
+                .collect(Collectors.toList());
+
+        ForkJoinPool pool = new ForkJoinPool();
+        SumAction task = new SumAction(data);
+        System.out.println("Sum:" + pool.invoke(task));
     }
 }
 

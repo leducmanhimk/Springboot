@@ -2,6 +2,7 @@ package com.example.jwt_demo1.config;
 
 import com.example.jwt_demo1.Email.MyEmail;
 import org.hibernate.mapping.Property;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
+
 public class MailConfig {
     //cấu hình host mail
     @Bean

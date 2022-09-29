@@ -75,6 +75,10 @@ public class User {
         return sodu;
     }
 
+    public void setSodu(int sodu) {
+        this.sodu = sodu;
+    }
+
     @Override
     public String toString() {
         return "ROLE_" + getRole().getRolename();
