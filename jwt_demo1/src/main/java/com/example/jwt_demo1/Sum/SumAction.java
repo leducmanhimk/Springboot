@@ -1,12 +1,16 @@
 package com.example.jwt_demo1.Sum;
 
+import com.example.jwt_demo1.controller.UserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 public class SumAction extends RecursiveTask<Long> {
     private static final int SEQUENTIAL_THRESHOLD = 5;
     private List<Long> data;
-
+    private static final Logger logger = LoggerFactory.getLogger(SumAction.class);
     public SumAction(List<Long> data){
         this.data = data;
     }
@@ -16,7 +20,7 @@ public class SumAction extends RecursiveTask<Long> {
         //trường hợp cơ bản
         if (data.size() <= SEQUENTIAL_THRESHOLD){
             long sum = computeSumDirectly();
-            System.out.format("Tổng của %s: %d\n",data.toString(),sum);
+           logger.info("Tổng của " + data.toString() + sum);
             return sum;
         }
         else { // trường hợp đệ quy

@@ -1,15 +1,14 @@
 package com.example.jwt_demo1.jwt;
 
 
-import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
+
 import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -20,11 +19,7 @@ public class JwtTokenProvider {
     //Thời gian có hiệu lực của chuỗi jwt
     private final long JWT_EXPIRATION = 60000;
 
-    @Value("${jwttoken.app.jwtCookieName}")
-    private String jwtCookies;
 
-    @Value("${jwttoken.app.jwtRefreshCookieName}")
-    private String jwtRefreshCookie;
 
     //taoj jwt tu thong tin user
     public String gennerateToken(User user) {
@@ -47,31 +42,13 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String doGenerateRefeshToken(User user) {
-        Date now = new Date();
-        long JWT_REFESHEXPIRATION = 100000;
-        Date expydate = new Date(now.getTime() + JWT_REFESHEXPIRATION);
-        Claims claims = Jwts.claims().setSubject(user.getUsername());
-//       claimd
-        claims.put("username", user.getUsername());
-        claims.put("email", user.getEmail());
-        claims.put("role", user.getRole());
-        claims.put("id", user.getId());
-        // Tạo chuỗi json web token từ id của user.
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expydate)
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
-                .compact();
-    }
+
 
     public String getUserNameFromJwtToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token).getBody();
-        return claims.getSubject().toString();
+        return claims.getSubject();
     }
 
     public boolean validateToken(String authToken) {

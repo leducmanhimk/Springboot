@@ -36,8 +36,7 @@ public class jwtController {
 
             if (user2.getPassword().equals(user1.getPassword())) {
                 String jwt = tokenProvider.gennerateToken(user2);
-                String rfjwt = tokenProvider.doGenerateRefeshToken(user2);
-                return new LoginResponse(jwt,rfjwt);
+                return new LoginResponse(jwt);
             }
         } catch (NullPointerException exception) {
             throw new NotfoundUsernameException();

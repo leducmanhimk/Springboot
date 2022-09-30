@@ -266,13 +266,13 @@ public class UserController {
         Random random = new Random();
 
         List<Long> data = random
-                .longs(0,1,5)
+                .longs(100000000,1,100)
                 .boxed()
                 .collect(Collectors.toList());
 
         ForkJoinPool pool = new ForkJoinPool();
         SumAction task = new SumAction(data);
-        System.out.println("Sum:" + pool.invoke(task));
+       logger.info("Sum:" + pool.invoke(task));
     }
 }
 
