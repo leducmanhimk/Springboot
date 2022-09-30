@@ -1,5 +1,4 @@
 package com.example.jwt_demo1.controller;
-
 import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
@@ -244,6 +243,8 @@ public class UserController {
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    //synchronized
     @GetMapping("/simulatorSyn")
     public void SimulatorSyn() {
         final User user = new User();
@@ -258,12 +259,14 @@ public class UserController {
         });
         t2.start();
     }
+
+    //fork / join
     @GetMapping("/simulatorforkjoin")
     public void SimulatorForkJoin(){
         Random random = new Random();
 
         List<Long> data = random
-                .longs(10,1,5)
+                .longs(0,1,5)
                 .boxed()
                 .collect(Collectors.toList());
 
