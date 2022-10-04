@@ -181,7 +181,7 @@ public class UserController {
 
     @DeleteMapping("/deleteuser/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> delete_an_User(@PathVariable Long id) {
+    public ResponseEntity<?> deleteanUser(@PathVariable Long id) {
         try {
 
             customUserRepository.delete(id);

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -30,12 +29,13 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public void save(MultipartFile file) {
+    public Runnable save(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(),this.root.resolve(file.getOriginalFilename()));
         }catch (Exception e){
             throw new RuntimeException("không thể lưu file");
         }
+        return null;
     }
 
     @Override

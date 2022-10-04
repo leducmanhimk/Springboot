@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public interface FilesStorageService {
     public void init() throws IOException;
 
-    public void save(MultipartFile file);
+    public Runnable save(MultipartFile file);
 
     public Resource load(String filename);
 
