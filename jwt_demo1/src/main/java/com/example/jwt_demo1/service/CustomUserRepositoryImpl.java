@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -19,7 +18,6 @@ import javax.transaction.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Future;
 
 @Service
 @AllArgsConstructor
@@ -28,10 +26,12 @@ public class CustomUserRepositoryImpl {
 
     }
 
-    User user = new User();
+
+    User user;
     private static final Logger logger = LoggerFactory.getLogger(CustomUserRepositoryImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
+
 
     @Autowired
     UserRespository userRespository;
@@ -62,7 +62,6 @@ public class CustomUserRepositoryImpl {
 
 
     public List<User> getAlluser() {
-
         String jpql = "SELECT u FROM User u";
         TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
 
@@ -80,30 +79,26 @@ public class CustomUserRepositoryImpl {
         entityManager.remove(user);
     }
 
-    public synchronized void RutTien(int sotien) {
+    public void RutTien(int sotien) throws InterruptedException {
+        Thread.sleep(30000);
         logger.info("giao dich rut tien dang thục hien,so tien " + sotien + "...");
         int sotienmoi = user.getSodu();
         if (user.getSodu() < sotien) {
             logger.info("so tien trong tai khoan khong du");
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                System.out.println(e.toString());
-            }
-        }
-    else {
+        } else {
             sotienmoi -= sotien;
             user.setSodu(sotienmoi);
-            logger.info("rut tien thanh cong,so tien hien co "+ sotienmoi);
+            logger.info("rut tien thanh cong,so tien hien co " + sotienmoi);
         }
     }
-    public synchronized void nopTien(int sotiennop){
+
+    public void nopTien(int sotiennop) throws InterruptedException {
+        Thread.sleep(30000);
         logger.info("Giao dịch nộp tiền đang được thực hiện với" +
                 " số tiền nộp = " + sotiennop + "...");
         int sotienmoi = user.getSodu();
         sotienmoi += sotiennop;
         user.setSodu(sotienmoi);
         logger.info("Nộp tiền thành công. Số tiền hiện có trong tài khoản = " + sotienmoi);
-        notify();
     }
 }

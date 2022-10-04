@@ -148,7 +148,6 @@ public class UserController {
         );
         CompletableFuture<User> user3 = CompletableFuture.supplyAsync(() ->
                 {
-
                     try {
                         Thread.sleep(30000);
                         logger.info("đã hoàn thành luồng 3");
@@ -249,14 +248,28 @@ public class UserController {
     public void SimulatorSyn() {
         final User user = new User();
         Thread t1 = new Thread(() -> {
-            logger.info("luồng 1 bắt đầu thực hiện");
-            customUserRepository.RutTien(20000);
+            try {
+
+                logger.info("luồng 1 bắt đầu thực hiện");
+                customUserRepository.RutTien(20000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         });
+        t1.setName("luồng rút tiền");
         t1.start();
         Thread t2 = new Thread(() -> {
-            logger.info("luồng 2 bắt đầu thực hiện");
-            customUserRepository.nopTien(30000);
+            try {
+
+                logger.info("luồng 2 bắt đầu thực hiện");
+                customUserRepository.nopTien(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         });
+        t2.setName("luồng nộp tiền");
         t2.start();
     }
 
@@ -264,9 +277,8 @@ public class UserController {
     @GetMapping("/simulatorforkjoin")
     public void SimulatorForkJoin(){
         Random random = new Random();
-
         List<Long> data = random
-                .longs(100000000,1,100)
+                .longs(100,1,10)
                 .boxed()
                 .collect(Collectors.toList());
 
@@ -274,5 +286,7 @@ public class UserController {
         SumAction task = new SumAction(data);
        logger.info("Sum:" + pool.invoke(task));
     }
+
+
 }
 

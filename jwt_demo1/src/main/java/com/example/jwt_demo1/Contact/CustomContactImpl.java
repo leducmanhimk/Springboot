@@ -34,7 +34,6 @@ public class CustomContactImpl {
     public List<Contact> finAll(){
         String jpql = "SELECT c FROM Contact c";
         TypedQuery<Contact> query = entityManager.createQuery(jpql,Contact.class);
-
         return Collections.unmodifiableList(query.getResultList());
     }
     //xóa một bản ghi

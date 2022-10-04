@@ -24,7 +24,7 @@ public class JwtTokenProvider {
     //taoj jwt tu thong tin user
     public String gennerateToken(User user) {
         Date now = new Date();
-        Date expydate = new Date(now.getTime() + JWT_EXPIRATION);
+        Date expiration_date = new Date(now.getTime() + JWT_EXPIRATION);
 
         Claims claims = Jwts.claims().setSubject(user.getUsername());
 //        claims.put("id", user.getId());
@@ -37,7 +37,7 @@ public class JwtTokenProvider {
                 .setSubject(user.getUsername())
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(expydate)
+                .setExpiration(expiration_date)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
