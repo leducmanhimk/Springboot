@@ -1,12 +1,8 @@
 package com.example.jwt_demo1.Sum;
-
-import com.example.jwt_demo1.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
-
 public class SumAction extends RecursiveTask<Long> {
     private static final int SEQUENTIAL_THRESHOLD = 5;
     private List<Long> data;

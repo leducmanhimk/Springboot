@@ -1,8 +1,7 @@
 package com.example.jwt_demo1.File;
-
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -10,6 +9,7 @@ import java.util.stream.Stream;
 public interface FilesStorageService {
     public void init() throws IOException;
 
+    @Async
     public Runnable save(MultipartFile file);
 
     public Resource load(String filename);

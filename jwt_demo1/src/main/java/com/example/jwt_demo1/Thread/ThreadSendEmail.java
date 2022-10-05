@@ -1,5 +1,4 @@
 package com.example.jwt_demo1.Thread;
-
 import com.example.jwt_demo1.Email.MyEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

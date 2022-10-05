@@ -22,14 +22,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 
@@ -230,7 +228,7 @@ public class UserController {
     public ResponseEntity<?> TestThreadPool() {
         ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
         for (int i = 0; i < 500; i++) {
-            Runnable worker = new MyRunable(10000L + i);
+            Runnable worker = new MyRunable(10L + i);
             executor.execute(worker);
         }
         // This will make the executor accept no new threads

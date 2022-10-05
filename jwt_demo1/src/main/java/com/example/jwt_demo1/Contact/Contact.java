@@ -1,6 +1,4 @@
 package com.example.jwt_demo1.Contact;
-
-
 import javax.persistence.*;
 
 @Entity

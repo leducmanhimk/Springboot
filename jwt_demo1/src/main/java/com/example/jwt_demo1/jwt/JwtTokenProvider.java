@@ -1,15 +1,9 @@
 package com.example.jwt_demo1.jwt;
-
-
-
 import com.example.jwt_demo1.User.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
-
 @Component
 @Slf4j
 public class JwtTokenProvider {

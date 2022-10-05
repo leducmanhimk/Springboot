@@ -1,7 +1,5 @@
 package com.example.jwt_demo1.ExceptionHandler;
-
 import com.example.jwt_demo1.payload.ResponseMessageFile;
-import org.hibernate.sql.OracleJoinFragment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-
 import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
@@ -28,6 +25,7 @@ public class apiExceptionHandler {
     public ResponseEntity<Object> nullUserException(NotfoundUsernameException exception) {
         return new ResponseEntity<>("không tìm thấy tài khoản", HttpStatus.NOT_FOUND);
     }
+
 
     @ExceptionHandler(value = IllegalUserException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

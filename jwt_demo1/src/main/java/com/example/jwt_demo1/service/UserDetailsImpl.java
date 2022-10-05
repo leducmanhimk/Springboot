@@ -1,19 +1,11 @@
 package com.example.jwt_demo1.service;
-
 import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.User.UserRespository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.web.servlet.oauth2.login.OAuth2LoginSecurityMarker;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
 public class UserDetailsImpl implements UserDetails {
     private  Long id;
     private  String username;

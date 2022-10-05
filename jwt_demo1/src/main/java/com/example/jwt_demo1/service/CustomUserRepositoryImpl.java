@@ -26,7 +26,6 @@ public class CustomUserRepositoryImpl {
 
     }
 
-
     User user;
     private static final Logger logger = LoggerFactory.getLogger(CustomUserRepositoryImpl.class);
     @PersistenceContext

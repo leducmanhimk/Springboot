@@ -1,20 +1,13 @@
 package com.example.jwt_demo1.controller;
-
-
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.jwt.JwtTokenProvider;
 import com.example.jwt_demo1.User.User;
 import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.LoginResponse;
 import com.example.jwt_demo1.payload.RandomStuff;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.access.prepost.PreAuthorize;
-
-
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @RestController
