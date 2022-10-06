@@ -58,6 +58,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
+           
             Thread upload1 = new Thread(thread, "sendmail");
             Thread upload2 = new Thread(thread, "sendmail2");
             String name = user.role.getRolename();
@@ -259,7 +260,6 @@ public class UserController {
         t1.start();
         Thread t2 = new Thread(() -> {
             try {
-
                 logger.info("luồng 2 bắt đầu thực hiện");
                 customUserRepository.nopTien(30000);
             } catch (InterruptedException e) {
@@ -270,6 +270,8 @@ public class UserController {
         t2.setName("luồng nộp tiền");
         t2.start();
     }
+
+    
 
     //fork / join
     @GetMapping("/simulatorforkjoin")

@@ -45,6 +45,7 @@ public class FilesController {
                 CompletableFuture.runAsync(runnable,executor).thenRunAsync(this::notify);
                 logger.info("luồng đang được thực thi " + executor);
                 logger.info("tải file thành công: tên file" + multipartFile.getOriginalFilename());
+
             }
             executor.shutdown();
             executor.awaitTermination(60, TimeUnit.SECONDS);
@@ -74,4 +75,5 @@ public class FilesController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
 }
