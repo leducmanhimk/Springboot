@@ -28,7 +28,6 @@ public class SumAction extends RecursiveTask<Long> {
             return secoundtask.compute()   + fistsubtask.join(); // đợi kết quả của công việc đầu tiên
 
         }
-
     }
     private long computeSumDirectly() {
         long sum = 0;

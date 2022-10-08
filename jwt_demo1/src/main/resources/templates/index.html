@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE HTML>
+<html lang="vi">
 <head>
     <title>Chat WebSocket</title>
     <script src="resources/js/sockjs-0.3.4.js"></script>
@@ -14,25 +15,29 @@
             document.getElementById('response').innerHTML = '';
         }
 
+        var ws;
+        function setConnected(connected) {
+            $("#connect").prop("disabled", connected);
+            $("#disconnect").prop("disabled", !connected);
+        }
+
         function connect() {
-            var socket = new SockJS('/chat');
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
-                setConnected(true);
-                console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/messages', function(messageOutput) {
-                    showMessageOutput(JSON.parse(messageOutput.body));
-                });
-            });
+            ws = new WebSocket('ws://localhost:8080/');
+            ws.onmessage = function(data) {
+                helloWorld(data.data);
+            }
+            setConnected(true);
         }
 
         function disconnect() {
-            if(stompClient != null) {
-                stompClient.disconnect();
+            if (ws != null) {
+                ws.close();
             }
             setConnected(false);
-            console.log("Disconnected");
+            console.log("Websocket is in disconnected state");
         }
+
+
 
         function sendMessage() {
             var from = document.getElementById('from').value;
@@ -52,6 +57,7 @@
     </script>
 </head>
 <body onload="disconnect()">
+<p>Get your greeting <a href="/">here</a></p>
 <div>
     <div>
         <input type="text" id="from" placeholder="Choose a nickname"/>

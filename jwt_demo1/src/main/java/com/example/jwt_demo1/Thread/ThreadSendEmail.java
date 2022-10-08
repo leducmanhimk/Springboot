@@ -29,6 +29,7 @@ public class ThreadSendEmail implements Runnable{
           emailSender.send(message);
         System.out.println("đã chạy vào đây");
         notify();
+
     }
 
 }

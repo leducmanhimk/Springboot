@@ -3,6 +3,7 @@ package com.example.jwt_demo1.User;
 import com.example.jwt_demo1.Role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 
 @Table(name = "user")
 @AllArgsConstructor
+@Document(indexName = "user",type = "user")
 public class User {
     public User(){
         System.out.println("Tài khoản hiện có = " + sodu);
