@@ -1,5 +1,4 @@
 package com.example.jwt_demo1.jwt;
-import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     JwtTokenProvider tokenProvider;
-
-    @Autowired
-    UserRespository userRespository;
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;

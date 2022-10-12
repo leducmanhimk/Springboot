@@ -9,10 +9,9 @@ import javax.persistence.*;
 
 
 @Entity
-
 @Table(name = "user")
 @AllArgsConstructor
-@Document(indexName = "user",type = "user")
+@Document(indexName = "userindex")
 public class User {
     public User(){
         System.out.println("Tài khoản hiện có = " + sodu);

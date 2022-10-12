@@ -1,7 +1,7 @@
 package com.example.jwt_demo1.service;
 
 import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.User.UserRespository;
+import com.example.jwt_demo1.User.UserRepository;
 import java8.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class CustomUserRepositoryImpl {
 
 
     @Autowired
-    UserRespository userRespository;
+    UserRepository userRespository;
 
     @Autowired
     JavaMailSender emailSender;

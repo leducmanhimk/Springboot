@@ -8,6 +8,7 @@ class JwtDemo1ApplicationTests {
 
     @Test
     void contextLoads() {
+        
     }
 
 }

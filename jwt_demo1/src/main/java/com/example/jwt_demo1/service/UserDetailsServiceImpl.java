@@ -1,6 +1,6 @@
 package com.example.jwt_demo1.service;
 import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.User.UserRespository;
+import com.example.jwt_demo1.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Autowired
-    UserRespository userRespository;
+    UserRepository userRespository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

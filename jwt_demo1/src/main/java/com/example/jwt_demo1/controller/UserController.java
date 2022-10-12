@@ -7,9 +7,9 @@ import com.example.jwt_demo1.Role.RoleRestponsitory;
 import com.example.jwt_demo1.Sum.SumAction;
 import com.example.jwt_demo1.Thread.MyRunable;
 import com.example.jwt_demo1.Thread.ThreadSendEmail;
+import com.example.jwt_demo1.User.UserRepository;
 import com.example.jwt_demo1.service.CustomUserRepositoryImpl;
 import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.UserRespone;
 import java8.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private final UserRespository userRespository;
+    private final UserRepository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
     private final RoleRestponsitory roleRestponsitory;
     private final JavaMailSender emailSender;
@@ -46,7 +46,7 @@ public class UserController {
     @Autowired
     public UserController(CustomUserRepositoryImpl customUserRepository
             , ThreadSendEmail threadSendEmail, JavaMailSender emailSender, RoleRestponsitory roleRestponsitory,
-                          UserRespository userRespository) {
+                          UserRepository userRespository) {
         this.customUserRepository = customUserRepository;
         this.thread = threadSendEmail;
         this.emailSender = emailSender;

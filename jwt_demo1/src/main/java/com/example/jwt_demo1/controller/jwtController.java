@@ -1,8 +1,8 @@
 package com.example.jwt_demo1.controller;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
+import com.example.jwt_demo1.User.UserRepository;
 import com.example.jwt_demo1.jwt.JwtTokenProvider;
 import com.example.jwt_demo1.User.User;
-import com.example.jwt_demo1.User.UserRespository;
 import com.example.jwt_demo1.payload.LoginResponse;
 import com.example.jwt_demo1.payload.RandomStuff;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ import javax.validation.Valid;
 @RequestMapping("/api_authen")
 public class jwtController {
     private final JwtTokenProvider tokenProvider;
-    private final UserRespository userRespository;
+    private final UserRepository userRespository;
     @Autowired
-    public  jwtController(UserRespository userRespository, JwtTokenProvider tokenProvider) {
+    public  jwtController(UserRepository userRespository, JwtTokenProvider tokenProvider) {
         this.userRespository = userRespository;
         this.tokenProvider = tokenProvider;
     }
