@@ -14,4 +14,6 @@ public class ResponseMessageFile{
         public void setMessage(String message) {
             this.message = message;
         }
+
+        
 }

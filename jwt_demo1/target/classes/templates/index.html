@@ -14,7 +14,6 @@
                 = connected ? 'visible' : 'hidden';
             document.getElementById('response').innerHTML = '';
         }
-
         var ws;
         function setConnected(connected) {
             $("#connect").prop("disabled", connected);
@@ -28,7 +27,6 @@
             }
             setConnected(true);
         }
-
         function disconnect() {
             if (ws != null) {
                 ws.close();

@@ -1,7 +1,10 @@
 package com.example.jwt_demo1.Contact;
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import javax.persistence.*;
 
 @Entity
+@Document(indexName = "contactindex")
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

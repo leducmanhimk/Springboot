@@ -2,6 +2,7 @@ package com.example.jwt_demo1.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
-
+@Document(indexName = "rolesindex")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
