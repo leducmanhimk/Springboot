@@ -25,5 +25,6 @@ public class JwtDemo1Application implements CommandLineRunner {
         storageService.deleteAll();
         storageService.init();
     }
+
 }
 

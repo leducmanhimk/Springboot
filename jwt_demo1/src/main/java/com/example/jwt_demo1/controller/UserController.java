@@ -3,7 +3,7 @@ import com.example.jwt_demo1.Email.MyEmail;
 import com.example.jwt_demo1.ExceptionHandler.IllegalUserException;
 import com.example.jwt_demo1.ExceptionHandler.NotfoundUsernameException;
 import com.example.jwt_demo1.Role.Role;
-import com.example.jwt_demo1.Role.RoleRestponsitory;
+import com.example.jwt_demo1.Role.RoleRepository;
 import com.example.jwt_demo1.Sum.SumAction;
 import com.example.jwt_demo1.Thread.MyRunable;
 import com.example.jwt_demo1.Thread.ThreadSendEmail;
@@ -39,13 +39,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRespository;
     private final CustomUserRepositoryImpl customUserRepository;
-    private final RoleRestponsitory roleRestponsitory;
+    private final RoleRepository roleRestponsitory;
     private final JavaMailSender emailSender;
     private final ThreadSendEmail thread;
 
     @Autowired
     public UserController(CustomUserRepositoryImpl customUserRepository
-            , ThreadSendEmail threadSendEmail, JavaMailSender emailSender, RoleRestponsitory roleRestponsitory,
+            , ThreadSendEmail threadSendEmail, JavaMailSender emailSender, RoleRepository roleRestponsitory,
                           UserRepository userRespository) {
         this.customUserRepository = customUserRepository;
         this.thread = threadSendEmail;
